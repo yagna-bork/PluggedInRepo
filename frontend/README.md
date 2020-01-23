@@ -1,5 +1,7 @@
 # Dev notes
-Bundle error: rni
+* Bundle error: rni
+* react-native run-android
+
 
 # Workflow
 ## Branch workflow
