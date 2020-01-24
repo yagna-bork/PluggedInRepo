@@ -42,11 +42,13 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.debug("Test");
     var apiRootUrl = 'http://localhost:3000/';
     fetch(apiRootUrl + 'images/all')
       .then(res => {
-        console.log(res);
+        res.json()
+          .then(json => {
+            console.log(json);
+          });
       });
   }
 
