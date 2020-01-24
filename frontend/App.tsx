@@ -42,24 +42,24 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    var apiRootUrl = 'http://localhost:3000/';
-    fetch(apiRootUrl + 'images/all')
-      .then(res => {
-        res.json()
-          .then(imageNames => {
-            var imagesNames: string[] = imageNames;
-            var imageUrls: string[] = [];
-            var imageUrlRoot = 'http://localhost:3000/images/';
+    // var apiRootUrl = 'http://localhost:3000/';
+    // fetch(apiRootUrl + 'images/all')
+    //   .then(res => {
+    //     res.json()
+    //       .then(imageNames => {
+    //         var imagesNames: string[] = imageNames;
+    //         var imageUrls: string[] = [];
+    //         var imageUrlRoot = 'http://localhost:3000/images/';
 
-            imageNames.forEach(imageName => {
-              imageUrls.push(imageUrlRoot+imageName);
-            });
+    //         imageNames.forEach(imageName => {
+    //           imageUrls.push(imageUrlRoot+imageName);
+    //         });
 
-            this.setState({
-              imageUrls: imageUrls
-            });
-          });
-      });
+    //         this.setState({
+    //           imageUrls: imageUrls
+    //         });
+    //       });
+    //   });
   }
 
   render() {
