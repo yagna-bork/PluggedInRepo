@@ -42,6 +42,7 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
+    console.debug("Test");
     var apiRootUrl = 'http://localhost:3000/';
     fetch(apiRootUrl + 'images/all')
       .then(res => {
@@ -52,7 +53,7 @@ class App extends Component<Props, State> {
   render() {
     return (
       <View style={styles.sectionContainer} >
-        <Text>Test</Text>
+        <Text>Test Change</Text>
         <Image
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.imageUrls[0] }}
