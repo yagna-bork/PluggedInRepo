@@ -42,34 +42,38 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    // var apiRootUrl = 'http://localhost:3000/';
-    // fetch(apiRootUrl + 'images/all')
-    //   .then(res => {
-    //     res.json()
-    //       .then(imageNames => {
-    //         var imagesNames: string[] = imageNames;
-    //         var imageUrls: string[] = [];
-    //         var imageUrlRoot = 'http://localhost:3000/images/';
+    var apiRootUrl = 'http://10.0.3.2:3000/';
+    fetch(apiRootUrl + 'images/all').then(res => {
+      console.log("before json()");
+      res.json().then(imageNames => {
+        var imagesNames: string[] = imageNames;
+        var imageUrls: string[] = [];
+        var imageUrlRoot = 'http://localhost:3000/images/';
 
-    //         imageNames.forEach(imageName => {
-    //           imageUrls.push(imageUrlRoot+imageName);
-    //         });
+        imageNames.forEach(imageName => {
+          imageUrls.push(imageUrlRoot + imageName);
+        });
 
-    //         this.setState({
-    //           imageUrls: imageUrls
-    //         });
-    //       });
-    //   });
+        this.setState({
+          imageUrls: imageUrls
+        });
+
+        console.log(this.state);
+      });
+    }).catch((err) => {
+      console.log("caught error");
+      console.log(err);
+    });
   }
 
   render() {
     return (
       <View style={styles.sectionContainer} >
-        <Text>Test One</Text>
-        {/* <Image
+        <Text>Test</Text>
+        <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: 'http://localhost:3000/images/download-1.jpg' }}
-        /> */}
+          source={{ uri: 'https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg' }}
+        />
       </View>
 
     );
