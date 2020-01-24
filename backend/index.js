@@ -3,10 +3,22 @@ const path = require('path');
 const fs = require('fs');
 const app = express();
 
-app.get('/images', (req, res) => {
+app.get('/images/all', (req, res) => {
   var imagesDirPath = path.join(__dirname, 'images');
   fs.readdir(imagesDirPath, (err, files) => {
     if(!err) {
+      res.send(files);
+    }
+    else {
+      res.status(500).send();
+    }
+  });
+});
+
+app.get('/images', (req, res) => {
+  var imagesDirPath = path.join(__dirname, 'images');
+  fs.readdir(imagesDirPath, (err, files) => {
+    if (!err) {
       res.send(files);
     }
     else {
