@@ -27,14 +27,35 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import Hello from './components/Hello';
 
-export default class App extends Component {
+interface Props {}
+interface State {
+  imageUrls: string[]
+}
+
+class App extends Component<Props, State> {
+  constructor(props : Props) {
+    super(props);
+
+    this.state = {
+      imageUrls: []
+    }
+  }
+
+  componentDidMount() {
+    var apiRootUrl = 'http://localhost:3000/';
+    fetch(apiRootUrl + 'images/all')
+      .then(res => {
+        console.log(res);
+      });
+  }
+
   render() {
     return (
       <View style={styles.sectionContainer} >
         <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: 'http://localhost:3000/images/download-2.jpg' }}
+          source={{ uri: this.state.imageUrls[0] }}
         />
       </View>
 
