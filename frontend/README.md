@@ -1,7 +1,8 @@
 # Dev notes
 * Bundle error: rni
 * react-native run-android
-*
+* android url: http://10.0.2.2:3000/
+* debug android: cmd+m
 
 
 # Workflow
