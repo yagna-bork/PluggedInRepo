@@ -46,8 +46,18 @@ class App extends Component<Props, State> {
     fetch(apiRootUrl + 'images/all')
       .then(res => {
         res.json()
-          .then(json => {
-            console.log(json);
+          .then(imageNames => {
+            var imagesNames: string[] = imageNames;
+            var imageUrls: string[] = [];
+            var imageUrlRoot = 'http://localhost:3000/images/';
+
+            imageNames.forEach(imageName => {
+              imageUrls.push(imageUrlRoot+imageName);
+            });
+
+            this.setState({
+              imageUrls: imageUrls
+            });
           });
       });
   }
