@@ -42,7 +42,7 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    var apiRootUrl = 'http://10.0.3.2:3000/';
+    var apiRootUrl = 'http://10.0.2.2:3000/';
     fetch(apiRootUrl + 'images/all').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
@@ -72,7 +72,7 @@ class App extends Component<Props, State> {
         <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: 'https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg' }}
+          source={{ uri: this.state.imageUrls[1] }}
         />
       </View>
 
