@@ -7,8 +7,6 @@
  */
 
 import React from 'react'
-import { Component } from 'react';
-import  Hello  from './components/Hello'
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,6 +14,7 @@ import {
   View,
   Text,
   StatusBar,
+  Image
 } from 'react-native';
 
 import {
@@ -25,11 +24,16 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Hello from './components/Hello';
 
 const App: () => React$Node = () => {
   return (
     <View style={styles.sectionContainer}>
-      <Hello name=" world" enthusiasmLevel={6}/>
+      <Text>Test</Text>
+      <Image
+        style={{ width: 100, height: 100 }}
+        source={{ uri: 'http://localhost:3000/images/download-2.jpg'}}
+      />
     </View>
     
   );
