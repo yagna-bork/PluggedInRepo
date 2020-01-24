@@ -66,10 +66,10 @@ class App extends Component<Props, State> {
     return (
       <View style={styles.sectionContainer} >
         <Text>Test One</Text>
-        <Image
+        {/* <Image
           style={{ width: 100, height: 100 }}
           source={{ uri: 'http://localhost:3000/images/download-1.jpg' }}
-        />
+        /> */}
       </View>
 
     );
