@@ -7,6 +7,7 @@
  */
 
 import React from 'react'
+import { Component } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -26,18 +27,20 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import Hello from './components/Hello';
 
-const App: () => React$Node = () => {
-  return (
-    <View style={styles.sectionContainer}>
-      <Text>Test</Text>
-      <Image
-        style={{ width: 100, height: 100 }}
-        source={{ uri: 'http://localhost:3000/images/download-2.jpg'}}
-      />
-    </View>
-    
-  );
-};
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.sectionContainer} >
+        <Text>Test</Text>
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={{ uri: 'http://localhost:3000/images/download-2.jpg' }}
+        />
+      </View>
+
+    );
+  }
+} 
 
 const styles = StyleSheet.create({
   scrollView: {
