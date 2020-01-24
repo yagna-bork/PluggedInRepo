@@ -3,6 +3,7 @@
 * react-native run-android
 * android url: http://10.0.2.2:3000/
 * debug android: cmd+m
+* git push -d origin <name of remote branch>
 
 
 # Workflow
