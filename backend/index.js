@@ -15,16 +15,6 @@ app.get('/images/all', (req, res) => {
   });
 });
 
-app.get('/images', (req, res) => {
-  var imagesDirPath = path.join(__dirname, 'images');
-  fs.readdir(imagesDirPath, (err, files) => {
-    if (!err) {
-      res.send(files);
-    }
-    else {
-      res.status(500).send();
-    }
-  });
-});
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(3000, () => console.log("Listening on port 3000..."));
