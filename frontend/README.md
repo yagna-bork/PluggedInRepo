@@ -1,6 +1,7 @@
 # Dev notes
 * Bundle error: rni
 * react-native run-android
+*
 
 
 # Workflow
