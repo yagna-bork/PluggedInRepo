@@ -65,6 +65,7 @@ class App extends Component<Props, State> {
   render() {
     return (
       <View style={styles.sectionContainer} >
+        <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.imageUrls[1] }}
