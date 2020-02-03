@@ -1,7 +1,10 @@
 # Dev notes
 * Bundle error: rni
 * react-native run-android
-
+* android url: http://10.0.2.2:3000/
+* debug android: cmd+m
+* git push -d origin <name of remote branch>
+* docker run -it -p 9000:3000 -v $(pwd):/usr/src/app pluggedin-backend-image
 
 # Workflow
 ## Branch workflow

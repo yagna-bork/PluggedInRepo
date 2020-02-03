@@ -6,7 +6,6 @@
 * git push -d origin <name of remote branch>
 * docker run -it -p 9000:3000 -v $(pwd):/usr/src/app pluggedin-backend-image
 
-
 # Workflow
 ## Branch workflow
 Commit frequent
