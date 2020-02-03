@@ -42,12 +42,13 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    var apiRootUrl = 'http://10.0.2.2:3000/';
-    fetch(apiRootUrl + 'images/all').then(res => {
+    var apiRootUrl = 'http://localhost:9000/';
+    // var apiRootUrl = 'http://10.0.2.2:9000/';
+    fetch(apiRootUrl + 'images/all/location').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
         var imageUrls: string[] = [];
-        var imageUrlRoot = 'http://localhost:3000/images/';
+        var imageUrlRoot = apiRootUrl + 'images/';
 
         imageNames.forEach(imageName => {
           imageUrls.push(imageUrlRoot + imageName);
