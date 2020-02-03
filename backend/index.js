@@ -5,7 +5,6 @@ const exif = require('exif-parser');
 
 const app = express();
 
-
 app.get('/images/all', (req, res) => {
   var imagesDirPath = path.join(__dirname, 'images');
   fs.readdir(imagesDirPath, (err, files) => {
@@ -20,7 +19,23 @@ app.get('/images/all', (req, res) => {
 
 app.get('/images/all/location', (req, res) => {
   var imagesDirPath = path.join(__dirname, 'images');
-  
+  fs.readdir(imagesDirPath, (err, filesName) => {
+    if (!err) {
+      var locations = [];
+      filesName.forEach(fileName => {
+        const buffer = fs.readFile(fileName, (err, data) => {
+          if(!err) {
+            console.log(data);
+          }
+        });
+        const parser = exif.create(buffer);
+        const result = parser.parse();
+      });
+    }
+    else {
+      res.status(500).send();
+    }
+  });
 }) 
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
