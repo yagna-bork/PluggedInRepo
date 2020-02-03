@@ -52,11 +52,25 @@ app.get('/images/all/location', (req, res) => {
       for (var i = 0; i < imgNames.length; i++) {
         var imgName = imgNames[i];
         var imgPath = path.join(imagesDirPath, imgName);
-        promises.push(fs.promises.readFile(imgPath));
+        promises.push(fs.promises.readFile(imgPath).then(data => {
+          if (!err) {
+            // console.log("here");
+            var parser = exif.create(data);
+            var img = parser.parse();
+
+            if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+              // console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+              // console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+              validImageNames.push(imgName);
+            }
+          }
+          else {
+            console.log("err");
+          }
+        }));
       }
 
-      console.log(promises);
-      Promise.all(promises).then((imgData) => {
+      Promise.all(promises).then(() => {
         //after all readFile calls are finished
         console.log(validImageNames);
         res.send(validImageNames);
@@ -94,9 +108,7 @@ app.get('/images/all/location', (req, res) => {
   //     res.status(500).send();
   //   }
   // });
-})
-
-
+});
 
 function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
