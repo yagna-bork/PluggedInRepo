@@ -18,25 +18,56 @@ app.get('/images/all', (req, res) => {
 });
 
 app.get('/images/all/location', (req, res) => {
+  var userLatitude = 52.292016;
+  var userLongitude = -1.532429;
+
   var imagesDirPath = path.join(__dirname, 'images');
-  fs.readdir(imagesDirPath, (err, filesName) => {
+  fs.readdir(imagesDirPath, (err, filesNames) => {
     if (!err) {
-      var locations = [];
-      filesName.forEach(fileName => {
-        const buffer = fs.readFile(fileName, (err, data) => {
+      validImageNames = [];
+      filesNames.forEach(imgName => {
+        var imgPath = path.join(imagesDirPath, imgName);
+        fs.readFile(imgPath, (err, data) => {
           if(!err) {
-            console.log(data);
+            var parser = exif.create(data);
+            var img = parser.parse();
+            
+            console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+            console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+            if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+              validImageNames.push(imgName);
+              console.log(validImageNames);
+            }
           }
         });
-        const parser = exif.create(buffer);
-        const result = parser.parse();
       });
+      console.log(validImageNames);
+      res.send(validImageNames);
     }
     else {
       res.status(500).send();
     }
   });
-}) 
+})
+
+function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1);  // deg2rad below
+  var dLon = deg2rad(lon2 - lon1);
+  var a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2)
+    ;
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d * 1000; //distance in m
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI / 180)
+}
+
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
