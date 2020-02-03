@@ -7,6 +7,7 @@ const app = express();
 
 const userLatitude = 52.292016;
 const userLongitude = -1.532429;
+const radius = 20; //meters
 
 app.get('/images/all', (req, res) => {
   var imagesDirPath = path.join(__dirname, 'images');
@@ -26,37 +27,15 @@ app.get('/images/all/location', (req, res) => {
     if(!err) {
       var promises = [];
       var validImageNames = [];
-      
-      // var imgPath = path.join(imagesDirPath, imgNames[1]);
-      // fs.promises.readFile(imgPath, (err, data) => {
-      //   console.log("here");
-      //   if (!err) {
-      //     // console.log("here");
-      //     var parser = exif.create(data);
-      //     var img = parser.parse();
-
-      //     // console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
-      //     // console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
-      //     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
-      //       resolve("here");
-      //     }
-      //   }
-      //   else {
-      //     reject(err);
-      //   }
-      // }).then(result => {
-      //   console.log(result);
-      // });
-
+  
       for (var i = 0; i < imgNames.length; i++) {
         var imgName = imgNames[i];
         var imgPath = path.join(imagesDirPath, imgName);
         promises.push(readFileAndCheckDistancePromise(imgName, imgPath, validImageNames));
       }
 
+      //after all readFile calls are finished
       Promise.all(promises).then(() => {
-        //after all readFile calls are finished
-        console.log(validImageNames);
         res.send(validImageNames);
       }).catch(err => res.status(500).send(err));
     }
@@ -64,45 +43,14 @@ app.get('/images/all/location', (req, res) => {
       res.status(500).send();
     }
   });
-
-  // var imagesDirPath = path.join(__dirname, 'images');
-  // fs.readdir(imagesDirPath, (err, filesNames) => {
-  //   if (!err) {
-  //     validImageNames = [];
-  //     filesNames.forEach(imgName => {
-  //       var imgPath = path.join(imagesDirPath, imgName);
-  //       fs.readFile(imgPath, (err, data) => {
-  //         if(!err) {
-  //           var parser = exif.create(data);
-  //           var img = parser.parse();
-            
-  //           console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
-  //           console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
-  //           if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
-  //             validImageNames.push(imgName);
-  //             console.log(validImageNames);
-  //           }
-  //         }
-  //       });
-  //     });
-  //     console.log(validImageNames);
-  //     res.send(validImageNames);
-  //   }
-  //   else {
-  //     res.status(500).send();
-  //   }
-  // });
 });
 
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
-    // console.log("here");
     var parser = exif.create(data);
     var img = parser.parse();
 
-    console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
-    console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
-    if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+    if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
     }
   });
