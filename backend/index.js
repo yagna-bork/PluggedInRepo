@@ -21,34 +21,116 @@ app.get('/images/all/location', (req, res) => {
   var userLatitude = 52.292016;
   var userLongitude = -1.532429;
 
+
   var imagesDirPath = path.join(__dirname, 'images');
-  fs.readdir(imagesDirPath, (err, filesNames) => {
-    if (!err) {
-      validImageNames = [];
-      filesNames.forEach(imgName => {
-        var imgPath = path.join(imagesDirPath, imgName);
-        fs.readFile(imgPath, (err, data) => {
-          if(!err) {
-            var parser = exif.create(data);
-            var img = parser.parse();
-            
-            console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
-            console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
-            if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
-              validImageNames.push(imgName);
-              console.log(validImageNames);
-            }
+  fs.readdir(imagesDirPath, (err, imgNames) => {
+    if(!err) {
+      var promises = [];
+      var validImageNames = [];
+      
+      var imgPath = path.join(imagesDirPath, imgNames[1]);
+      fs.promises.readFile(imgPath, (err, data) => {
+        console.log("here");
+        if (!err) {
+          // console.log("here");
+          var parser = exif.create(data);
+          var img = parser.parse();
+
+          // console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+          // console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+          if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+            resolve("here");
           }
-        });
+        }
+        else {
+          reject(err);
+        }
+      }).then(result => {
+        console.log(result);
       });
-      console.log(validImageNames);
-      res.send(validImageNames);
+
+      // for (var i = 0; i < imgNames.length; i++) {
+      //   var imgName = imgNames[i];
+      //   var imgPath = path.join(imagesDirPath, imgName);
+      //   promises.push(fs.promises.readFile(imgPath, (err, data) => {
+      //     console.log("here");
+      //     if (!err) {
+      //       // console.log("here");
+      //       var parser = exif.create(data);
+      //       var img = parser.parse();
+
+      //       // console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+      //       // console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+      //       if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+      //         validImageNames.push(imgName);
+      //       }
+      //     }
+      //     else {
+      //       console.log("err");
+      //     }
+      //   }));
+      // }
+
+      // console.log(promises);
+      // Promise.all(promises).then(() => {
+      //   //after all readFile calls are finished
+      //   console.log(validImageNames);
+      //   res.send(validImageNames);
+      // });
     }
     else {
       res.status(500).send();
     }
   });
+
+  // var imagesDirPath = path.join(__dirname, 'images');
+  // fs.readdir(imagesDirPath, (err, filesNames) => {
+  //   if (!err) {
+  //     validImageNames = [];
+  //     filesNames.forEach(imgName => {
+  //       var imgPath = path.join(imagesDirPath, imgName);
+  //       fs.readFile(imgPath, (err, data) => {
+  //         if(!err) {
+  //           var parser = exif.create(data);
+  //           var img = parser.parse();
+            
+  //           console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+  //           console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+  //           if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+  //             validImageNames.push(imgName);
+  //             console.log(validImageNames);
+  //           }
+  //         }
+  //       });
+  //     });
+  //     console.log(validImageNames);
+  //     res.send(validImageNames);
+  //   }
+  //   else {
+  //     res.status(500).send();
+  //   }
+  // });
 })
+
+var isImageWithinRangePromise = new Promise(function (imageName, imagePath) {
+  promises.push(fs.promises.readFile(imgPath, (err, data) => {
+    // console.log("here");
+    if (!err) {
+      // console.log("here");
+      var parser = exif.create(data);
+      var img = parser.parse();
+
+      // console.log(imgPath + " lat: " + img.tags.GPSLatitude + " long: " + img.tags.GPSLongitude);
+      // console.log(imgPath + " distance = " + getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude));
+      if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < 20) {
+        resolve(imgName);
+      }
+    }
+    else {
+      reject(err);
+    }
+  }))
+});
 
 function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
   var R = 6371; // Radius of the earth in km
