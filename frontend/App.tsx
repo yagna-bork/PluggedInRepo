@@ -42,8 +42,8 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    var apiRootUrl = 'http://localhost:9000/';
-    // var apiRootUrl = 'http://10.0.2.2:9000/';
+    // var apiRootUrl = 'http://localhost:9000/';
+    var apiRootUrl = 'http://10.0.2.2:9000/';
     fetch(apiRootUrl + 'images/all/location').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
