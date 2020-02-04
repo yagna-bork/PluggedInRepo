@@ -49,7 +49,11 @@ app.get('/images/all/location', (req, res) => {
 
 app.post('/images', upload.single('image'), (req, res) => {
   if(req.file) {
-    console.log(req.body);
+    console.log('req.file in post /images');
+    console.log(req.file);
+
+    console.log('req.body.metadata in post /images');
+    console.log(req.body.metadata);
   }
   res.send('Response from server');
 });
