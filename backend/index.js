@@ -45,6 +45,12 @@ app.get('/images/all/location', (req, res) => {
   });
 });
 
+app.post('images/', (req, res) => {
+  console.log('here');
+  console.log(req);
+  res.send('Response from server');
+});
+
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
     var parser = exif.create(data);

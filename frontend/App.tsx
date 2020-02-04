@@ -103,6 +103,11 @@ class App extends Component<Props, State> {
     });
   }
 
+  //hotfix file:///... -> remove file:// -> /...
+  stripImageUri(imageUri: string) {
+    return imageUri.substring(8);
+  }
+
   uploadImage() {
     RNFetchBlob.fetch('POST', '', {
       Authorization: "Bearer access-token",
