@@ -34,7 +34,7 @@ import Hello from './components/Hello';
 interface Props {}
 interface State {
   imageUrls: string[],
-  uploadImage: { uri: string, data: string }
+  uploadImage: { uri: string, data: string },
 }
 
 var emptyAvatarSource = { uri: "", data: "" };
@@ -52,6 +52,10 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
+    this.fetchImages();
+  }
+
+  fetchImages() {
     fetch(apiRootUrl + 'images/all/location').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
