@@ -35,9 +35,10 @@ interface Props {}
 interface State {
   imageUrls: string[],
   uploadImage: { uri: string, data: string },
+  location: { ready: boolean, lat: number, long: number }
 }
 
-var emptyAvatarSource = { uri: "", data: "" };
+var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
 var apiRootUrl = 'http://localhost:9000/';
     // var apiRootUrl = 'http://10.0.2.2:9000/';
 
@@ -53,6 +54,26 @@ class App extends Component<Props, State> {
 
   componentDidMount() {
     this.fetchImages();
+    this.getCurrentLocation();
+  }
+
+  getCurrentLocation() {
+    let geoOptions = {
+      enableHighAccuracy: true,
+      timeOut: 20000,
+      maximumAge: 60 * 60 * 24 //info valid for one day?
+    }
+    console.log(navigator);
+    // navigator.geolocation.getCurrentPosition(position => {
+    //   this.setState({
+    //     imageUrls: this.state.imageUrls,
+    //     uploadImage: this.state.uploadImage,
+    //     location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
+    //   });
+    //   console.log('state after location: ' + this.state);
+    // }, err => {
+    //   console.log('err trying to get current position: ' + err);
+    // }, geoOptions);
   }
 
   fetchImages() {
