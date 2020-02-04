@@ -142,22 +142,24 @@ class App extends Component<Props, State> {
   uploadImage() {
     console.log(this.state.uploadImage);
 
-
-
-    RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
-      Authorization: "Bearer access-token",
-      otherHeader: "foo",
-      'Content-Type': 'multipart/form-data',
-    }, [
-      { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
-      { name: 'metadata', data : JSON.stringify({
-        lat: this.state.location.lat,
-        long: this.state.location.long
-      }) }
-    ]).then((resp) => {
-      console.log('resp: ' + resp);
-    }).catch((err) => {
-      console.log('err: ' + err);
+    this.getCurrentLocation().then(() => {
+      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
+        Authorization: "Bearer access-token",
+        otherHeader: "foo",
+        'Content-Type': 'multipart/form-data',
+      }, [
+        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
+        {
+          name: 'metadata', data: JSON.stringify({
+            lat: this.state.location.lat,
+            long: this.state.location.long
+          })
+        }
+      ]).then((resp) => {
+        console.log('resp: ' + resp);
+      }).catch((err) => {
+        console.log('err: ' + err);
+      });
     });
   }
 
