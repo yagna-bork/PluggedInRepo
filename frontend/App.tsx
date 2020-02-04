@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'react-native-fetch-blob'
 
 import {
   Header,
@@ -37,6 +38,8 @@ interface State {
 }
 
 var emptyAvatarSource = { uri: "" };
+var apiRootUrl = 'http://localhost:9000/';
+    // var apiRootUrl = 'http://10.0.2.2:9000/';
 
 class App extends Component<Props, State> {
   constructor(props : Props) {
@@ -49,8 +52,6 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    var apiRootUrl = 'http://localhost:9000/';
-    // var apiRootUrl = 'http://10.0.2.2:9000/';
     fetch(apiRootUrl + 'images/all/location').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
@@ -102,6 +103,20 @@ class App extends Component<Props, State> {
     });
   }
 
+  uploadImage() {
+    RNFetchBlob.fetch('POST', '', {
+      Authorization: "Bearer access-token",
+      otherHeader: "foo",
+      'Content-Type': 'multipart/form-data',
+    }, [
+      { name: 'avatar-foo', filename: 'avatar-foo.png', type: 'image/foo', data: RNFetchBlob.wrap(this.state.avatarSource.uri) }
+    ]).then((resp) => {
+      console.log("resp after uploading file: " + resp);
+    }).catch((err) => {
+      console.log("err after uploading file: " + err);
+    });
+  }
+
   render() {
     return (
       <View style={styles.sectionContainer} >
@@ -116,6 +131,9 @@ class App extends Component<Props, State> {
         />
         <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.selectImage.bind(this)}>
           <Text>Select</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.uploadImage.bind(this)}>
+          <Text>Upload</Text>
         </TouchableOpacity>
       </View>
 
