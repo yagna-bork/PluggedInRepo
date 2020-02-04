@@ -59,22 +59,25 @@ class App extends Component<Props, State> {
   }
 
   getCurrentLocation() {
-    let geoOptions = {
-      enableHighAccuracy: true,
-      timeOut: 20000,
-      maximumAge: 60 * 60 * 24 //info valid for one day?
-    }
-  
-    Geolocation.getCurrentPosition(position => {
-      this.setState({
-        imageUrls: this.state.imageUrls,
-        uploadImage: this.state.uploadImage,
-        location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
-      });
-      console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
-    }, err => {
-      console.log('err trying to get current position: ' + err);
-    }, geoOptions);
+    return new Promise((resolve, reject) => {
+      let geoOptions = {
+        enableHighAccuracy: true,
+        timeOut: 20000,
+        maximumAge: 60 * 60 * 24 //info valid for one day?
+      }
+
+      Geolocation.getCurrentPosition(position => {
+        this.setState({
+          imageUrls: this.state.imageUrls,
+          uploadImage: this.state.uploadImage,
+          location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
+        });
+        console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
+        resolve();
+      }, err => {
+        reject(err);
+      }, geoOptions);
+    });
   }
 
   fetchImages() {
@@ -138,6 +141,8 @@ class App extends Component<Props, State> {
 
   uploadImage() {
     console.log(this.state.uploadImage);
+
+
 
     RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
       Authorization: "Bearer access-token",
