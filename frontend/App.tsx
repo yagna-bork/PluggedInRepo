@@ -18,6 +18,8 @@ import {
   Image
 } from 'react-native';
 
+import ImagePicker from 'react-native-image-picker';
+
 import {
   Header,
   LearnMoreLinks,
@@ -42,8 +44,8 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    // var apiRootUrl = 'http://localhost:9000/';
-    var apiRootUrl = 'http://10.0.2.2:9000/';
+    var apiRootUrl = 'http://localhost:9000/';
+    // var apiRootUrl = 'http://10.0.2.2:9000/';
     fetch(apiRootUrl + 'images/all/location').then(res => {
       console.log("before json()");
       res.json().then(imageNames => {
@@ -64,6 +66,8 @@ class App extends Component<Props, State> {
       console.log("caught error");
       console.log(err);
     });
+
+    //get permissions
   }
 
   render() {
