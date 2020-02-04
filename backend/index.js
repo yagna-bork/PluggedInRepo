@@ -48,8 +48,9 @@ app.get('/images/all/location', (req, res) => {
 });
 
 app.post('/images', upload.single('image'), (req, res) => {
-  console.log('here');
-  console.log(req);
+  if(req.file) {
+    console.log(req.file);
+  }
   res.send('Response from server');
 });
 
