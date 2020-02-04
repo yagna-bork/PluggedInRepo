@@ -95,6 +95,8 @@ class App extends Component<Props, State> {
       } else {
         const source = { uri: response.uri, data: response.data };
 
+        console.log(response.data);
+
         this.setState({
           imageUrls: this.state.imageUrls,
           uploadImage: source
