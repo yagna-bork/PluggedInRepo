@@ -63,6 +63,7 @@ class App extends Component<Props, State> {
       timeOut: 20000,
       maximumAge: 60 * 60 * 24 //info valid for one day?
     }
+    console.log('here');
     console.log(navigator);
     // navigator.geolocation.getCurrentPosition(position => {
     //   this.setState({
