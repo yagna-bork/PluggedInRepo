@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const exif = require('exif-parser');
 const multer = require('multer');
+const piexif = require("piexifjs");
 
 const userLatitude = 52.292016;
 const userLongitude = -1.532429;
@@ -51,6 +52,20 @@ app.post('/images', upload.single('image'), (req, res) => {
   if(req.file) {
     console.log('req.file in post /images');
     console.log(req.file);
+
+    //adding metadata to image
+    var imgName = req.file.filename;
+    var imgPath = path.join(imagesDirPath, imgName);
+    // console.log(imgPath);
+    var jpeg = fs.readFileSync(imgPath);
+    var data = jpeg.toString("binary");
+    var exifObj = piexif.load(data);
+    exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
+    exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
+    var exifbytes = piexif.dump(exifObj);
+    var newData = piexif.insert(exifbytes, data);
+    var newJpeg = new Buffer(newData, "binary");
+    fs.writeFileSync(imgPath + '-location', newJpeg);
 
     console.log('req.body.metadata in post /images');
     console.log(req.body.metadata);
