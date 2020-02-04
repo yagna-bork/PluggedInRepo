@@ -15,7 +15,8 @@ import {
   View,
   Text,
   StatusBar,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
@@ -31,15 +32,19 @@ import Hello from './components/Hello';
 
 interface Props {}
 interface State {
-  imageUrls: string[]
+  imageUrls: string[],
+  avatarSource: { uri: string }
 }
+
+var emptyAvatarSource = { uri: "" };
 
 class App extends Component<Props, State> {
   constructor(props : Props) {
     super(props);
 
     this.state = {
-      imageUrls: []
+      imageUrls: [],
+      avatarSource: emptyAvatarSource
     }
   }
 
@@ -57,7 +62,8 @@ class App extends Component<Props, State> {
         });
 
         this.setState({
-          imageUrls: imageUrls
+          imageUrls: imageUrls,
+          avatarSource: emptyAvatarSource
         });
 
         console.log(this.state);
@@ -66,8 +72,34 @@ class App extends Component<Props, State> {
       console.log("caught error");
       console.log(err);
     });
+  }
 
-    //get permissions
+  selectImage() {
+    const options = {
+      title: 'Select Avatar',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else {
+        const source = { uri: response.uri };
+
+        this.setState({
+          imageUrls: this.state.imageUrls,
+          avatarSource: source
+        });
+      }
+    });
   }
 
   render() {
@@ -78,6 +110,13 @@ class App extends Component<Props, State> {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.imageUrls[1] }}
         />
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={{ uri: this.state.avatarSource.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.avatarSource.uri }}
+        />
+        <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.selectImage.bind(this)}>
+          <Text>Select</Text>
+        </TouchableOpacity>
       </View>
 
     );
