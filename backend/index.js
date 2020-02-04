@@ -2,15 +2,17 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const exif = require('exif-parser');
-
-const app = express();
+const multer = require('multer');
 
 const userLatitude = 52.292016;
 const userLongitude = -1.532429;
 const radius = 20; //meters
+const imagesDirPath = path.join(__dirname, 'images');
+
+const app = express();
+const upload = multer({ dest: imagesDirPath });
 
 app.get('/images/all', (req, res) => {
-  var imagesDirPath = path.join(__dirname, 'images');
   fs.readdir(imagesDirPath, (err, files) => {
     if(!err) {
       res.send(files);
@@ -45,7 +47,7 @@ app.get('/images/all/location', (req, res) => {
   });
 });
 
-app.post('images/', (req, res) => {
+app.post('images/', upload.single('image'), (req, res) => {
   console.log('here');
   console.log(req);
   res.send('Response from server');
