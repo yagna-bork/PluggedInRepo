@@ -34,10 +34,10 @@ import Hello from './components/Hello';
 interface Props {}
 interface State {
   imageUrls: string[],
-  avatarSource: { uri: string }
+  uploadImage: { uri: string, data: string }
 }
 
-var emptyAvatarSource = { uri: "" };
+var emptyAvatarSource = { uri: "", data: "" };
 var apiRootUrl = 'http://localhost:9000/';
     // var apiRootUrl = 'http://10.0.2.2:9000/';
 
@@ -93,33 +93,35 @@ class App extends Component<Props, State> {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        const source = { uri: response.uri };
+        const source = { uri: response.uri, data: response.data };
 
         this.setState({
           imageUrls: this.state.imageUrls,
-          avatarSource: source
+          uploadImage: source
         });
       }
     });
   }
 
   //hotfix file:///... -> remove file:// -> /...
-  stripImageUri(imageUri: string) {
-    return imageUri.substring(8);
+  stripImageUri(imageUri: string) : string {
+    return imageUri.substring(7);
   }
 
   uploadImage() {
-    RNFetchBlob.fetch('POST', '', {
+    console.log(this.stripImageUri(this.state.uploadImage));
+
+    RNFetchBlob.fetch('POST', 'http://www.example.com/upload-form', {
       Authorization: "Bearer access-token",
       otherHeader: "foo",
       'Content-Type': 'multipart/form-data',
     }, [
-      { name: 'avatar-foo', filename: 'avatar-foo.png', type: 'image/foo', data: RNFetchBlob.wrap(this.state.avatarSource.uri) }
+      { name: 'avatar-png', filename: 'avatar-png.png', type: 'image/png', data: binaryDataInBase64 },
     ]).then((resp) => {
-      console.log("resp after uploading file: " + resp);
+      // ...
     }).catch((err) => {
-      console.log("err after uploading file: " + err);
-    });
+      // ...
+    })
   }
 
   render() {
@@ -132,7 +134,7 @@ class App extends Component<Props, State> {
         />
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: this.state.avatarSource.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.avatarSource.uri }}
+          source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.avatarSource.uri }}
         />
         <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.selectImage.bind(this)}>
           <Text>Select</Text>
