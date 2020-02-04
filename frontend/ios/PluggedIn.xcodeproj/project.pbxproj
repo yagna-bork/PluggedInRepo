@@ -161,7 +161,6 @@
 				C2D5C68F563DC4CAF8B5A54B /* Pods-PluggedInTests.debug.xcconfig */,
 				0FE9CD48A583DCB1772BFE24 /* Pods-PluggedInTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -308,6 +307,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
