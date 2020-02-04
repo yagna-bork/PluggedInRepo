@@ -20,7 +20,8 @@ import {
 } from 'react-native';
 
 import ImagePicker from 'react-native-image-picker';
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'react-native-fetch-blob';
+import Geolocation from '@react-native-community/geolocation';
 
 import {
   Header,
@@ -63,18 +64,17 @@ class App extends Component<Props, State> {
       timeOut: 20000,
       maximumAge: 60 * 60 * 24 //info valid for one day?
     }
-    console.log('here');
-    console.log(navigator);
-    // navigator.geolocation.getCurrentPosition(position => {
-    //   this.setState({
-    //     imageUrls: this.state.imageUrls,
-    //     uploadImage: this.state.uploadImage,
-    //     location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
-    //   });
-    //   console.log('state after location: ' + this.state);
-    // }, err => {
-    //   console.log('err trying to get current position: ' + err);
-    // }, geoOptions);
+  
+    Geolocation.getCurrentPosition(position => {
+      this.setState({
+        imageUrls: this.state.imageUrls,
+        uploadImage: this.state.uploadImage,
+        location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
+      });
+      console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
+    }, err => {
+      console.log('err trying to get current position: ' + err);
+    }, geoOptions);
   }
 
   fetchImages() {
