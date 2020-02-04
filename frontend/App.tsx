@@ -47,7 +47,7 @@ class App extends Component<Props, State> {
 
     this.state = {
       imageUrls: [],
-      avatarSource: emptyAvatarSource
+      uploadImage: emptyAvatarSource
     }
   }
 
@@ -64,7 +64,7 @@ class App extends Component<Props, State> {
 
         this.setState({
           imageUrls: imageUrls,
-          avatarSource: emptyAvatarSource
+          uploadImage: emptyAvatarSource
         });
 
         console.log(this.state);
@@ -109,7 +109,7 @@ class App extends Component<Props, State> {
   }
 
   uploadImage() {
-    console.log(this.stripImageUri(this.state.uploadImage));
+    console.log(this.state.uploadImage);
 
     RNFetchBlob.fetch('POST', 'http://www.example.com/upload-form', {
       Authorization: "Bearer access-token",
