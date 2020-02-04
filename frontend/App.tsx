@@ -119,9 +119,9 @@ class App extends Component<Props, State> {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
+        console.log('image object: ');
+        console.log(response);
         const source = { uri: response.uri, data: response.data };
-
-        console.log(response.data);
 
         this.setState({
           imageUrls: this.state.imageUrls,
