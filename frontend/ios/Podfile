@@ -7,7 +7,7 @@ target 'PluggedIn' do
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
   pod 'RCTTypeSafety', :path => "../node_modules/react-native/Libraries/TypeSafety"
-  pod 'React', :path => '../node_modules/react-native/' :subspecs => [
+  pod 'React', :path => '../node_modules/react-native/', :subspecs => [
     'RCTGeolocation',
   ]
   pod 'React-Core', :path => '../node_modules/react-native/'
