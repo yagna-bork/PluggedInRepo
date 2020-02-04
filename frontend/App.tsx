@@ -136,7 +136,7 @@ class App extends Component<Props, State> {
         />
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.avatarSource.uri }}
+          source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         />
         <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.selectImage.bind(this)}>
           <Text>Select</Text>
