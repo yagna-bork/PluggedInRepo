@@ -71,7 +71,7 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
     exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(lat);
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = long;
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
