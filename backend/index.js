@@ -84,22 +84,41 @@ app.post('/images', upload.single('image'), (req, res) => {
 });
 
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
-  return fs.promises.readFile(imgPath).then(data => {
-    // var parser = exif.create(data);
-    // var img = parser.parse();
+  // return fs.promises.readFile(imgPath).then(data => {
+  //   // var parser = exif.create(data);
+  //   // var img = parser.parse();
 
-    var dataStr = data.toString("binary");
+  //   // var dataStr = data.toString("binary");
 
-    var img = piexif.load(dataStr);
+  //   // var img = piexif.load(dataStr);
 
-    console.log(img.GPS[2]);
-    console.log(img.GPS[4]);
+  //   // console.log(img.GPS[2]);
+  //   // console.log(img.GPS[4]);
 
-    // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
-    // console.log(img);
-    // if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
-    //   validImageNames.push(imgName);
-    // }
+  //   // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
+  //   // console.log(img);
+  //   // if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
+  //   //   validImageNames.push(imgName);
+  //   // }
+  // });
+
+  return new Promise((resolve, reject) => {
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+      var exifObj = piexif.load(e.target.result);
+      for (var ifd in exifObj) {
+        if (ifd == "thumbnail") {
+          continue;
+        }
+        console.log("-" + ifd);
+        for (var tag in exifObj[ifd]) {
+          console.log("  " + piexif.TAGS[ifd][tag]["name"] + ":" + exifObj[ifd][tag]);
+        }
+      }
+    };
+    reader.readAsDataURL(file).then(() => {
+      resolve();
+    });
   });
 }
 
