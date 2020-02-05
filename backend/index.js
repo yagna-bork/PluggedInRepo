@@ -88,9 +88,12 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     // var parser = exif.create(data);
     // var img = parser.parse();
 
-    var img = piexif.load(data);
+    var dataStr = data.toString("binary");
 
-    console.log(img);
+    var img = piexif.load(dataStr);
+
+    console.log(img.GPS[2]);
+    console.log(img.GPS[4]);
 
     // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
     // console.log(img);
