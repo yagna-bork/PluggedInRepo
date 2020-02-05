@@ -68,9 +68,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
     exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
     exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(lat);
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = degToDmsRational(lat);
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = degToDmsRational(long);
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
@@ -79,6 +79,21 @@ app.post('/images', upload.single('image'), (req, res) => {
   }
   res.send('Response from server');
 });
+
+function degToDmsRational(degFloat) {
+  var minFloat = degFloat % 1 * 60
+  var secFloat = minFloat % 1 * 60
+  var deg = Math.floor(degFloat)
+  var min = Math.floor(minFloat)
+  var sec = Math.round(secFloat * 100)
+
+  deg = Math.abs(deg) * 1
+  min = Math.abs(min) * 1
+  sec = Math.abs(sec) * 1
+
+  return [[deg, 1], [min, 1], [sec, 100]]
+}
+
 
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
