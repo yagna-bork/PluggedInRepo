@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dms-conversion": "^3.1.1",
     "exif-parser": "^0.1.12",
     "express": "^4.17.1",
     "filereader": "^0.10.3",
