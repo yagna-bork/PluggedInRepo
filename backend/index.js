@@ -4,6 +4,7 @@ const fs = require('fs');
 const exif = require('exif-parser');
 const multer = require('multer');
 const piexif = require("piexifjs");
+const FileReader = require('filereader');
 
 const userLatitude = 52.292016;
 const userLongitude = -1.532429;
@@ -104,6 +105,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
 
   return new Promise((resolve, reject) => {
     var reader = new FileReader();
+    console.log("here");
     reader.onloadend = function (e) {
       console.log("here");
       var exifObj = piexif.load(e.target.result);
@@ -118,7 +120,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
       }
       resolve();
     };
-    read.onerror(err => {
+    reader.onerror(err => {
       reject(err);
     });
     reader.readAsDataURL(imgPath);
