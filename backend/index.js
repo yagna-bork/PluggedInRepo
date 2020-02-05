@@ -60,11 +60,11 @@ app.post('/images', upload.single('image'), (req, res) => {
     var imgName = req.file.filename;
     var imgPath = path.join(imagesDirPath, imgName);
 
-    // var lat = JSON.parse(req.body.metadata).lat;
-    // var long = JSON.parse(req.body.metadata).long;
+    var lat = JSON.parse(req.body.metadata).lat;
+    var long = JSON.parse(req.body.metadata).long;
 
-    var lat = undefined;
-    var long = undefined;
+    // var lat = undefined;
+    // var long = undefined
 
     // console.log("lat post: " + lat);
     // console.log("lat post: " + long);
