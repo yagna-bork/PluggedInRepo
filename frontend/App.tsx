@@ -66,23 +66,18 @@ class App extends Component<Props, State> {
         maximumAge: 60 * 60 * 24 //info valid for one day?
       }
 
-      this.setState({
-        imageUrls: this.state.imageUrls,
-        uploadImage: this.state.uploadImage,
-        location: { ready: true, lat: 52.292216, long: - 1.532377 }
-      });
-    //   Geolocation.getCurrentPosition(position => {
-        // this.setState({
-        //   imageUrls: this.state.imageUrls,
-        //   uploadImage: this.state.uploadImage,
-        //   location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
-        // });
-    //     console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
-    //     resolve();
-    //   }, err => {
-    //     reject(err);
-    //   }, geoOptions);
-    // });
+      Geolocation.getCurrentPosition(position => {
+        this.setState({
+          imageUrls: this.state.imageUrls,
+          uploadImage: this.state.uploadImage,
+          location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
+        });
+        console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
+        resolve();
+      }, err => {
+        reject(err);
+      }, geoOptions);
+    });
   }
 
   fetchImages() {

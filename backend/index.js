@@ -68,9 +68,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
     exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
     exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = lat;
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(lat);
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = long;
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
@@ -101,7 +101,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
     console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
     console.log(imgExif.tags.GPSLatitude);
-
+    
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
     }
