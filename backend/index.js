@@ -59,17 +59,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     //adding metadata to image
     var imgName = req.file.filename;
     var imgPath = path.join(imagesDirPath, imgName);
-
     var lat = JSON.parse(req.body.metadata).lat;
     var long = JSON.parse(req.body.metadata).long;
 
-    // var lat = undefined;
-    // var long = undefined
-
-    // console.log("lat post: " + lat);
-    // console.log("lat post: " + long);
-
-    // console.log(imgPath);
     var jpeg = fs.readFileSync(imgPath);
     var data = jpeg.toString("binary");
     var exifObj = piexif.load(data);
@@ -80,30 +72,10 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
 
-
-    // console.log("lat === check");
-    // console.log("lat: " + lat + " translation: " + piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(lat)));
-    // console.log(lat === piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(lat)));
-
-    // console.log("long === check");
-    // console.log("long: " + long + " translation: " + piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(long)));
-    // console.log(long === piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(long)));
-
-    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
-    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
-    console.log("here1");
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
     fs.writeFileSync(imgPath + '-location', newJpeg);
-
-    console.log('req.body.metadata in post /images');
-    console.log(req.body.metadata);
-
-    //steps
-    //1. logic errors within this function
-    //2. google around similar error
-    //3. try completely new method of add exif data
   }
   res.send('Response from server');
 });
@@ -129,11 +101,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
     console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
     console.log(imgExif.tags.GPSLatitude);
-
-    // console.log(img.GPS[4]);
-
-    // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
-    // console.log(img);
+    
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
     }
