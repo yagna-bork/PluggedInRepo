@@ -80,6 +80,7 @@ app.post('/images', upload.single('image'), (req, res) => {
   res.send('Response from server');
 });
 
+//taken from https://github.com/hMatoba/piexifjs/issues/1
 function degToDmsRational(degFloat) {
   var minFloat = degFloat % 1 * 60
   var secFloat = minFloat % 1 * 60
@@ -94,7 +95,6 @@ function degToDmsRational(degFloat) {
   return [[deg, 1], [min, 1], [sec, 100]]
 }
 
-
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
     var parser = exif.create(data);
@@ -106,16 +106,14 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     // console.log(img);
     console.log(imgName);
     console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
-    if (img.GPS[piexif.GPSIFD.GPSLongitudeRef] == 'W') {
-      console.log(-piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude]));
-    }
-    else {
-      console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude]));
-    }
+    console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
     console.log(imgExif.tags.GPSLongitude);
     console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
     console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
     console.log(imgExif.tags.GPSLatitude);
+
+    // var imgLat = 
+    // var imgLong = 
     
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
