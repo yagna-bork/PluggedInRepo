@@ -86,19 +86,20 @@ app.post('/images', upload.single('image'), (req, res) => {
 
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
-    // var parser = exif.create(data);
-    // var img = parser.parse();
+    var parser = exif.create(data);
+    var imgExif = parser.parse();
 
     var dataStr = data.toString("binary");
-
     var img = piexif.load(dataStr);
 
-    console.log(img);
-    console.log(img.GPS[2]);
-    console.log(img.GPS[4]);
+    // console.log(img);
+    console.log(imgName);
+    console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
+    console.log(imgExif.tags.GPSLongitude);
+    // console.log(img.GPS[4]);
 
-    console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
-    console.log(img);
+    // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
+    // console.log(img);
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
     }
