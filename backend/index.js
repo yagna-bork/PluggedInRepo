@@ -73,6 +73,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
 
+    console.log("long === check");
+    console.log(long === piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(long)))
+
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
@@ -94,10 +97,13 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
 
     // console.log(img);
     console.log(imgName);
+    console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
     console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
     console.log(imgExif.tags.GPSLongitude);
+    console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
     console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
     console.log(imgExif.tags.GPSLatitude);
+
     // console.log(img.GPS[4]);
 
     // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
