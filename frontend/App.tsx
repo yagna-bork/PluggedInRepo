@@ -60,24 +60,31 @@ class App extends Component<Props, State> {
 
   getCurrentLocation() {
     return new Promise((resolve, reject) => {
-      let geoOptions = {
-        enableHighAccuracy: true,
-        timeOut: 20000,
-        maximumAge: 60 * 60 * 24 //info valid for one day?
-      }
+    //   let geoOptions = {
+    //     enableHighAccuracy: true,
+    //     timeOut: 20000,
+    //     maximumAge: 60 * 60 * 24 //info valid for one day?
+    //   }
 
-      Geolocation.getCurrentPosition(position => {
-        this.setState({
-          imageUrls: this.state.imageUrls,
-          uploadImage: this.state.uploadImage,
-          location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
-        });
-        console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
-        resolve();
-      }, err => {
-        reject(err);
-      }, geoOptions);
+    //   Geolocation.getCurrentPosition(position => {
+    //     this.setState({
+    //       imageUrls: this.state.imageUrls,
+    //       uploadImage: this.state.uploadImage,
+    //       location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
+    //     });
+    //     console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
+    //     resolve();
+    //   }, err => {
+    //     reject(err);
+    //   }, geoOptions);
+    // });
+
+    this.setState({
+      imageUrls: this.state.imageUrls,
+      uploadImage: this.state.uploadImage,
+      location: { ready: true, lat: 52.292016, long: -1.532429 }
     });
+    resolve();
   }
 
   fetchImages() {
