@@ -99,6 +99,11 @@ app.post('/images', upload.single('image'), (req, res) => {
 
     console.log('req.body.metadata in post /images');
     console.log(req.body.metadata);
+
+    //steps
+    //1. logic errors within this function
+    //2. google around similar error
+    //3. try completely new method of add exif data
   }
   res.send('Response from server');
 });
