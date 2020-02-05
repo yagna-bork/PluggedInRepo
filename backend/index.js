@@ -86,8 +86,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     // console.log("long: " + long + " translation: " + piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(long)));
     // console.log(long === piexif.GPSHelper.dmsRationalToDeg(piexif.GPSHelper.degToDmsRational(long)));
 
-    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
-    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
+    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
+    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
+    console.log(exifObj);
     var exifbytes = piexif.dump(exifObj);
     // console.log("here");
     var newData = piexif.insert(exifbytes, data);
