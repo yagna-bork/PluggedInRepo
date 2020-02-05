@@ -80,15 +80,15 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
     exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
     exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = latitude;
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude);
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = longitude;
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = ConvertDMSToFormat(longitude);
 
 
     // console.log("long upload: ");
-    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
+    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
     // console.log("lat upload: ");
-    // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
+    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
@@ -120,6 +120,9 @@ function ConvertDDToDMS(lat, long) {
   return dmsCoords.dmsArrays;
 }
 
+function ConvertDMSToFormat(dms) {
+  return [[dms[0] ,1], [dms[1], 1], [dms[2], 100]];
+}
 
 //taken from https://stackoverflow.com/questions/1140189/converting-latitude-and-longitude-to-decimal-values
 function ConvertDMSToDD(degrees, minutes, seconds, direction) {
@@ -141,11 +144,15 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
 
     console.log(img);
     console.log(imgName);
-    // console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
-    console.log("piexif long: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
-    console.log(imgExif.tags.GPSLongitude);
-    console.log("piexif lat: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
-    console.log(imgExif.tags.GPSLatitude);
+    console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
+    console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
+    // console.log("piexif long: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
+    // console.log(imgExif.tags.GPSLongitude);
+    // console.log("piexif lat: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
+    // console.log(imgExif.tags.GPSLatitude);
+
+
+    // console.log(ConvertDMSToDD());
 
     var imgLat = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]);
     var imgLong = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]);
