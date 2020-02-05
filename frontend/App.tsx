@@ -79,12 +79,13 @@ class App extends Component<Props, State> {
     //   }, geoOptions);
     // });
 
-    this.setState({
-      imageUrls: this.state.imageUrls,
-      uploadImage: this.state.uploadImage,
-      location: { ready: true, lat: 52.292016, long: -1.532429 }
+      this.setState({
+        imageUrls: this.state.imageUrls,
+        uploadImage: this.state.uploadImage,
+        location: { ready: true, lat: 52.292016, long: -1.532429 }
+      });
+      resolve();
     });
-    resolve();
   }
 
   fetchImages() {

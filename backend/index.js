@@ -72,6 +72,10 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = degToDmsRational(long);
 
+
+    console.log("long upload: " + exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
+    console.log("lat upload: " + exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
+
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
@@ -103,14 +107,13 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var dataStr = data.toString("binary");
     var img = piexif.load(dataStr);
 
-    // console.log(img);
-    // console.log(imgName);
+    console.log(img);
+    console.log(imgName);
     // console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
-    // console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
-    // console.log(imgExif.tags.GPSLongitude);
-    // console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
-    // console.log(piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
-    // console.log(imgExif.tags.GPSLatitude);
+    console.log("piexif long: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
+    console.log(imgExif.tags.GPSLongitude);
+    console.log("piexif lat: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
+    console.log(imgExif.tags.GPSLatitude);
 
     var imgLat = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]);
     var imgLong = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]);
