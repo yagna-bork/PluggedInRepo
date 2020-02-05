@@ -53,15 +53,25 @@ app.post('/images', upload.single('image'), (req, res) => {
     console.log('req.file in post /images');
     console.log(req.file);
 
+    console.log(req.body);
+
     //adding metadata to image
     var imgName = req.file.filename;
     var imgPath = path.join(imagesDirPath, imgName);
+
+    var lat = req.body.metadata.lat;
+    var long = req.body.metadata.long;
     // console.log(imgPath);
     var jpeg = fs.readFileSync(imgPath);
     var data = jpeg.toString("binary");
     var exifObj = piexif.load(data);
     exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
     exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = piexif.GPSHelper.degToDmsRational(lat);
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
+    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = piexif.GPSHelper.degToDmsRational(long);
+
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
@@ -78,6 +88,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var parser = exif.create(data);
     var img = parser.parse();
 
+    console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
       validImageNames.push(imgName);
     }
