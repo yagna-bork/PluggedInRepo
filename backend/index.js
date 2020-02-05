@@ -105,9 +105,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
 
   return new Promise((resolve, reject) => {
     var reader = new FileReader();
-    console.log("here");
-    reader.onloadend = function (e) {
-      console.log("here");
+    reader.on('loadend', function (e) {
       var exifObj = piexif.load(e.target.result);
       for (var ifd in exifObj) {
         if (ifd == "thumbnail") {
@@ -119,7 +117,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
         }
       }
       resolve();
-    };
+    });
     reader.onerror(err => {
       reject(err);
     });
