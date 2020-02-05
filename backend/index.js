@@ -91,9 +91,8 @@ app.post('/images', upload.single('image'), (req, res) => {
 
     // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
     // console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
-    console.log(exifObj);
+    console.log("here1");
     var exifbytes = piexif.dump(exifObj);
-    // console.log("here");
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
     fs.writeFileSync(imgPath + '-location', newJpeg);
