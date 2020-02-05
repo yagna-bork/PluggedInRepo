@@ -85,13 +85,18 @@ app.post('/images', upload.single('image'), (req, res) => {
 
 var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
-    var parser = exif.create(data);
-    var img = parser.parse();
+    // var parser = exif.create(data);
+    // var img = parser.parse();
 
-    console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
-    if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
-      validImageNames.push(imgName);
-    }
+    var img = piexif.load(data);
+
+    console.log(img);
+
+    // console.log(imgName + "location: " + img.tags.GPSLatitude + "," + img.tags.GPSLongitude);
+    // console.log(img);
+    // if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, img.tags.GPSLatitude, img.tags.GPSLongitude) < radius) {
+    //   validImageNames.push(imgName);
+    // }
   });
 }
 
