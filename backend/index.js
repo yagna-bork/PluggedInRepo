@@ -129,6 +129,8 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var imgLat = imgExif.tags.GPSLatitude;
     var imgLong = imgExif.tags.GPSLongitude;
 
+    console.log(imgName + ": " + imgLat + ", " + imgLong);
+
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
       validImageNames.push(imgName);
     }
