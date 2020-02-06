@@ -8,6 +8,7 @@
 
 import React from 'react'
 import { Component } from 'react';
+import { PermissionsAndroid } from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
@@ -76,6 +77,7 @@ class App extends Component<Props, State> {
         console.log("err location: ");
         console.log(err);
       });
+    this.requestLocationPermission();
   }
 
   getCurrentLocation() {
@@ -177,6 +179,30 @@ class App extends Component<Props, State> {
         console.log(err);
       });
     });
+  }
+
+  async requestLocationPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        {
+          title: 'Location access',
+          message:
+            'PluggedIn needs access to your location ' +
+            "so you can see what's going on around yoy.",
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('Location permission granted');
+      } else {
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   render() {
