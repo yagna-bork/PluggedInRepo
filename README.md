@@ -29,3 +29,15 @@ Merge with master into branch, resolve dependencies, then merge branch into mast
 ### Bad?
 
 * Not much
+
+## Sprint 2
+### Good?
+* Made big chunk work
+
+### Bad?
+* Lots of improvements future needed because of the hacky way things done
+* Improvements storing location dms more accuratly in future
+
+## Improve?
+* Do changes in small increments -> commit -> test
+* Keep code organised, simple even debugging i.e. no excessive comments cos of log lines, not worth mental penilty
