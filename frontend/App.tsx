@@ -67,10 +67,9 @@ class App extends Component<Props, State> {
       console.log(err);
     });
     
+    //ios
     this.requestLocationPermission().then(() => {
       this.getCurrentLocation();
-    }).then(() => {
-      this.requestCameraPermission();
     }).then(() => {
       console.log("state after location: ");
       console.log(this.state);
@@ -79,6 +78,20 @@ class App extends Component<Props, State> {
       console.log(err);
       console.log("api version: " + Platform.Version);
     });
+
+    //android permissions
+    // this.requestLocationPermission().then(() => {
+    //   this.getCurrentLocation();
+    // }).then(() => {
+    //   this.requestCameraPermission();
+    // }).then(() => {
+    //   console.log("state after location: ");
+    //   console.log(this.state);
+    // }).catch(err => {
+    //   console.log("err location: ");
+    //   console.log(err);
+    //   console.log("api version: " + Platform.Version);
+    // });
   }
 
   getCurrentLocation() {
@@ -184,6 +197,7 @@ class App extends Component<Props, State> {
     });
   }
 
+  //android permissions
   async requestCameraPermission() {
     console.log("inside camera permission");
     try {
@@ -209,7 +223,7 @@ class App extends Component<Props, State> {
     }
   }
 
-
+  //android permissions
   async requestLocationPermission() {
     try {
       const granted = await PermissionsAndroid.request(
