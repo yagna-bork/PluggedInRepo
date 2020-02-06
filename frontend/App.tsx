@@ -8,7 +8,7 @@
 
 import React from 'react'
 import { Component } from 'react';
-import { PermissionsAndroid } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
@@ -77,6 +77,7 @@ class App extends Component<Props, State> {
         .catch(err => {
           console.log("err location: ");
           console.log(err);
+          console.log("api version: " + Platform.Version);
         });
     });
   }
