@@ -68,16 +68,17 @@ class App extends Component<Props, State> {
         console.log("err fetching images: ");
         console.log(err);
     });
-    this.getCurrentLocation()
-      .then(() => {
-        console.log("state after location: ");
-        console.log(this.state);
-      })
-      .catch(err => {
-        console.log("err location: ");
-        console.log(err);
-      });
-    this.requestLocationPermission();
+    this.requestLocationPermission().then(() => {
+      this.getCurrentLocation()
+        .then(() => {
+          console.log("state after location: ");
+          console.log(this.state);
+        })
+        .catch(err => {
+          console.log("err location: ");
+          console.log(err);
+        });
+    });
   }
 
   getCurrentLocation() {
