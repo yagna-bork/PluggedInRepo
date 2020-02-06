@@ -59,26 +59,25 @@ class App extends Component<Props, State> {
   }
 
   componentDidMount() {
-    this.fetchImages()
-      .then(() => {
-        console.log("state after fetching images: ");
-        console.log(this.state);
-      })
-      .catch(err => {
-        console.log("err fetching images: ");
-        console.log(err);
+    this.fetchImages().then(() => {
+      console.log("state after fetching images: ");
+      console.log(this.state);
+    }).catch(err => {
+      console.log("err fetching images: ");
+      console.log(err);
     });
+    
     this.requestLocationPermission().then(() => {
-      this.getCurrentLocation()
-        .then(() => {
-          console.log("state after location: ");
-          console.log(this.state);
-        })
-        .catch(err => {
-          console.log("err location: ");
-          console.log(err);
-          console.log("api version: " + Platform.Version);
-        });
+      this.getCurrentLocation();
+    }).then(() => {
+      this.requestCameraPermission();
+    }).then(() => {
+      console.log("state after location: ");
+      console.log(this.state);
+    }).catch(err => {
+      console.log("err location: ");
+      console.log(err);
+      console.log("api version: " + Platform.Version);
     });
   }
 
@@ -182,6 +181,31 @@ class App extends Component<Props, State> {
       });
     });
   }
+
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
 
   async requestLocationPermission() {
     try {
