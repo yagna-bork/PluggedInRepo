@@ -44,8 +44,8 @@ interface State {
 var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
 var defaultLocation = { ready: false, lat: -100000, long: -100000 };
 
-var apiRootUrl = 'http://localhost:9000/';
-    // var apiRootUrl = 'http://10.0.2.2:9000/';
+// var apiRootUrl = 'http://localhost:9000/';
+    var apiRootUrl = 'http://10.0.2.2:9000/';
 
 class App extends Component<Props, State> {
   constructor(props : Props) {
