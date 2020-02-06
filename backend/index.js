@@ -57,9 +57,8 @@ app.get('/images/all/location', (req, res) => {
 
 app.post('/images', upload.single('image'), (req, res) => {
   if(req.file) {
-    console.log('req.file in post /images');
+    console.log("/images: POST incoming file");
     console.log(req.file);
-
     console.log(req.body);
 
     //adding metadata to image
@@ -67,12 +66,6 @@ app.post('/images', upload.single('image'), (req, res) => {
     var imgPath = path.join(imagesDirPath, imgName);
     var lat = JSON.parse(req.body.metadata).lat;
     var long = JSON.parse(req.body.metadata).long;
-
-    console.log("lat upload before conversion: " + lat);
-    console.log("long upload before conversion: " + long);
-
-    // console.log("lat converison: " + deg_to_dms(lat));
-    // console.log("long converison: " + deg_to_dms(long));
 
     const { longitude, latitude } = ConvertDDToDMS(lat, long);
 
@@ -85,37 +78,16 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude);
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = ConvertDMSToFormat(longitude);
-
-
-    // console.log("long upload: ");
-    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLongitude]);
-    // console.log("lat upload: ");
-    console.log(exifObj["GPS"][piexif.GPSIFD.GPSLatitude]);
+    
+    //todo need to find way to store more precise conversion values
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
     fs.writeFileSync(imgPath, newJpeg);
-
-    console.log("new method allowed");
   }
   res.send('Response from server');
 });
-
-//taken from https://github.com/hMatoba/piexifjs/issues/1
-// function degToDmsRational(degFloat) {
-//   var minFloat = degFloat % 1 * 60
-//   var secFloat = minFloat % 1 * 60
-//   var deg = Math.floor(degFloat)
-//   var min = Math.floor(minFloat)
-//   var sec = Math.round(secFloat * 100)
-
-//   deg = Math.abs(deg) * 1
-//   min = Math.abs(min) * 1
-//   sec = Math.abs(sec) * 1
-
-//   return [[deg, 1], [min, 1], [sec, 100]]
-// }
 
 function ConvertDDToDMS(lat, long) {
   const dmsCoords = new dmsConversion.default(lat, long);
@@ -140,30 +112,13 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
   return fs.promises.readFile(imgPath).then(data => {
     var parser = exif.create(data);
     var imgExif = parser.parse();
-
-    var dataStr = data.toString("binary");
-    var img = piexif.load(dataStr);
-
-    // console.log(img);
-    // console.log(imgName);
-    // console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
-    // console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
-    // console.log("piexif long: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
-    // // console.log(imgExif.tags.GPSLongitude);
-    // console.log("piexif lat: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
-    // // console.log(imgExif.tags.GPSLatitude);
-
-
-    // console.log(ConvertDMSToDD());
-
-    var imgLong = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]);
-    var imgLat = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]);
-    
-    // console.log("imgLat: " + imgLat);
-    // console.log("imgLong: " + imgLong);
+    var imgLat = imgExif.tags.GPSLatitude;
+    var imgLong = imgExif.tags.GPSLongitude;
 
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
       console.log(imgName + ": " + imgLat + "," + imgLong);
+      console.log("long with exif: " + imgExif.tags.GPSLongitude);
+      console.log("lat with exif: " + imgExif.tags.GPSLatitude);
       validImageNames.push(imgName);
     }
   });
