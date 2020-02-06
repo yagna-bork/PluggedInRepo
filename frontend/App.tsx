@@ -183,6 +183,7 @@ class App extends Component<Props, State> {
   }
 
   async requestCameraPermission() {
+    console.log("inside camera permission");
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
