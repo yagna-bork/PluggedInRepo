@@ -62,6 +62,7 @@ app.get('/images/all/location', (req, res) => {
       Promise.all(promises).then(() => {
         res.send(validImageNames);
       }).catch(err => {
+        console.log(err);
         res.status(500).send(err);
       });
     }
@@ -129,9 +130,11 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var imgLat = imgExif.tags.GPSLatitude;
     var imgLong = imgExif.tags.GPSLongitude;
 
-    console.log(imgName + ": " + imgLat + ", " + imgLong);
+    // console.log(imgName + ": " + imgLat + ", " + imgLong);
+    // console.log("looking for: " + userLatitude + ", " + userLongitude);
 
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
+      // console.log("here");
       validImageNames.push(imgName);
     }
   });

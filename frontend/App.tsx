@@ -101,7 +101,7 @@ class App extends Component<Props, State> {
 
   fetchImages() {
     return new Promise((resolve, reject) => {
-      fetch(apiRootUrl + 'images/all').then(res => {
+      fetch(apiRootUrl + 'images/all/location').then(res => {
         res.json().then(imageNames => {
           var imageUrls: string[] = [];
           var imageUrlRoot = apiRootUrl + 'images/';
