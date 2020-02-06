@@ -160,6 +160,8 @@ class App extends Component<Props, State> {
 
   uploadImage() {
     this.getCurrentLocation().then(() => {
+      console.log("about to send: ");
+      console.log(this.state.location);
       RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
         otherHeader: "foo",
