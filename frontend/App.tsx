@@ -59,11 +59,23 @@ class App extends Component<Props, State> {
 
   componentDidMount() {
     this.fetchImages()
-      .then(() => console.log("state after fetching iamges: " + this.state))
-      .catch(err => console.log("err location: " + err));
+      .then(() => {
+        console.log("state after fetching images: ");
+        console.log(this.state);
+      })
+      .catch(err => {
+        console.log("err fetching images: ");
+        console.log(err);
+    });
     this.getCurrentLocation()
-      .then(() => console.log("state after location: " + this.state))
-      .catch(err => console.log("err location: " + err));
+      .then(() => {
+        console.log("state after location: ");
+        console.log(this.state);
+      })
+      .catch(err => {
+        console.log("err location: ");
+        console.log(err);
+      });
   }
 
   getCurrentLocation() {
@@ -173,7 +185,7 @@ class App extends Component<Props, State> {
         <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: this.state.imageUrls[1] }}
+          source={{ uri: this.state.imageUrls[3] }}
         />
         <Image
           style={{ width: 100, height: 100 }}
