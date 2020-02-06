@@ -20,7 +20,7 @@ const imagesDirPath = path.join(__dirname, 'images');
 const app = express();
 const upload = multer({ dest: imagesDirPath });
 
-app.get('/images/all', (req, res) => {
+app.get('/images/all/location', (req, res) => {
   fs.readdir(imagesDirPath, (err, files) => {
     if(!err) {
       res.send(files);
@@ -37,6 +37,8 @@ app.get('/images/all/location', (req, res) => {
     if(!err) {
       var promises = [];
       var validImageNames = [];
+
+      console.log("fetched images");
   
       for (var i = 0; i < imgNames.length; i++) {
         var imgName = imgNames[i];
@@ -115,10 +117,10 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var imgLat = imgExif.tags.GPSLatitude;
     var imgLong = imgExif.tags.GPSLongitude;
 
+    console.log(imgName + " being checked for location validitiy");
+
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
-      console.log(imgName + ": " + imgLat + "," + imgLong);
-      console.log("long with exif: " + imgExif.tags.GPSLongitude);
-      console.log("lat with exif: " + imgExif.tags.GPSLatitude);
+      console.log(imgName + " is valid for images/all/location");
       validImageNames.push(imgName);
     }
   });

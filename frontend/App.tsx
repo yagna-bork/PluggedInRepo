@@ -31,6 +31,7 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import Hello from './components/Hello';
+import { resolvePlugin } from '@babel/core';
 
 interface Props {}
 interface State {
@@ -40,6 +41,8 @@ interface State {
 }
 
 var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
+var defaultLocation = { ready: false, lat: -100000, long: -100000 };
+
 var apiRootUrl = 'http://localhost:9000/';
     // var apiRootUrl = 'http://10.0.2.2:9000/';
 
@@ -49,13 +52,18 @@ class App extends Component<Props, State> {
 
     this.state = {
       imageUrls: [],
-      uploadImage: emptyAvatarSource
+      uploadImage: emptyAvatarSource,
+      location: defaultLocation
     }
   }
 
   componentDidMount() {
-    this.fetchImages();
-    this.getCurrentLocation();
+    this.fetchImages()
+      .then(() => console.log("state after fetching iamges: " + this.state))
+      .catch(err => console.log("err location: " + err));
+    this.getCurrentLocation()
+      .then(() => console.log("state after location: " + this.state))
+      .catch(err => console.log("err location: " + err));
   }
 
   getCurrentLocation() {
@@ -72,43 +80,34 @@ class App extends Component<Props, State> {
           uploadImage: this.state.uploadImage,
           location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
         });
-        console.log('state after location: ' + this.state.location.lat + "," + this.state.location.long);
         resolve();
       }, err => {
         reject(err);
       }, geoOptions);
     });
-
-      // this.setState({
-      //   imageUrls: this.state.imageUrls,
-      //   uploadImage: this.state.uploadImage,
-      //   location: { ready: true, lat: 52.292016, long: -1.532429 }
-      // });
-      // resolve();
-    // });
   }
 
   fetchImages() {
-    fetch(apiRootUrl + 'images/all/location').then(res => {
-      console.log("before json()");
-      res.json().then(imageNames => {
-        var imageUrls: string[] = [];
-        var imageUrlRoot = apiRootUrl + 'images/';
+    return new Promise((resolve, reject) => {
+      fetch(apiRootUrl + 'images/all').then(res => {
+        console.log("before json()");
+        res.json().then(imageNames => {
+          var imageUrls: string[] = [];
+          var imageUrlRoot = apiRootUrl + 'images/';
 
-        imageNames.forEach(imageName => {
-          imageUrls.push(imageUrlRoot + imageName);
+          imageNames.forEach(imageName => {
+            imageUrls.push(imageUrlRoot + imageName);
+          });
+
+          this.setState({
+            imageUrls: imageUrls,
+            uploadImage: emptyAvatarSource
+          });
+          resolve();
         });
-
-        this.setState({
-          imageUrls: imageUrls,
-          uploadImage: emptyAvatarSource
-        });
-
-        console.log(this.state);
+      }).catch((err) => {
+        reject(err);
       });
-    }).catch((err) => {
-      console.log("caught error");
-      console.log(err);
     });
   }
 
