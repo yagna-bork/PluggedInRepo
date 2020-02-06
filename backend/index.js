@@ -5,9 +5,7 @@ const exif = require('exif-parser');
 const multer = require('multer');
 const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
-
-console.log(dmsConversion.default);
-const parseDms = dmsConversion.parseDms;
+// const parseDms = dmsConversion.parseDms;
 
 
 const userLatitude = 52.292016;
