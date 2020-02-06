@@ -5,6 +5,7 @@ const exif = require('exif-parser');
 const multer = require('multer');
 const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
+const crypto = require('crypto');
 // const parseDms = dmsConversion.parseDms;
 
 
@@ -16,9 +17,20 @@ const userLongitude = -122.01681111111111;
 
 const radius = 10000; //meters
 const imagesDirPath = path.join(__dirname, 'images');
+const imgFileExt = 'jpg';
 
 const app = express();
-const upload = multer({ dest: imagesDirPath });
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, imagesDirPath);
+  },
+  filename: function (req, file, cb) {
+    crypto.pseudoRandomBytes(16, function (err, raw) {
+      cb(null, raw.toString('hex') + Date.now() + '.' + imgFileExt);
+    });
+  }
+});
+const upload = multer({ storage: storage });
 
 app.get('/images/all', (req, res) => {
   fs.readdir(imagesDirPath, (err, files) => {

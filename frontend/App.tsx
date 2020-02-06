@@ -185,7 +185,7 @@ class App extends Component<Props, State> {
         <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
-          source={{ uri: this.state.imageUrls[3] }}
+          source={{ uri: this.state.imageUrls[0] }}
         />
         <Image
           style={{ width: 100, height: 100 }}
