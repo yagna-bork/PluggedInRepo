@@ -48,10 +48,10 @@ app.get('/images/all/location', (req, res) => {
 
       //after all readFile calls are finished
       Promise.all(promises).then(() => {
-        console.log("here");
         res.send(validImageNames);
-      }).catch(err => res.status(500).send(err));
-      console.log(promises);
+      }).catch(err => {
+        res.status(500).send(err);
+      });
     }
     else {
       res.status(500).send();
