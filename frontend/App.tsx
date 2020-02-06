@@ -90,7 +90,6 @@ class App extends Component<Props, State> {
   fetchImages() {
     return new Promise((resolve, reject) => {
       fetch(apiRootUrl + 'images/all').then(res => {
-        console.log("before json()");
         res.json().then(imageNames => {
           var imageUrls: string[] = [];
           var imageUrlRoot = apiRootUrl + 'images/';
@@ -122,8 +121,6 @@ class App extends Component<Props, State> {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
-
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -147,8 +144,6 @@ class App extends Component<Props, State> {
   }
 
   uploadImage() {
-    console.log(this.state.uploadImage);
-
     this.getCurrentLocation().then(() => {
       RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
@@ -163,9 +158,11 @@ class App extends Component<Props, State> {
           })
         }
       ]).then((resp) => {
-        console.log('resp: ' + resp);
+        console.log('resp from server after uploading images');
+        console.log(resp);
       }).catch((err) => {
-        console.log('err: ' + err);
+        console.log('err from server after uploading images');
+        console.log(err);
       });
     });
   }

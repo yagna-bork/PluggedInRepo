@@ -20,7 +20,7 @@ const imagesDirPath = path.join(__dirname, 'images');
 const app = express();
 const upload = multer({ dest: imagesDirPath });
 
-app.get('/images/all/location', (req, res) => {
+app.get('/images/all', (req, res) => {
   fs.readdir(imagesDirPath, (err, files) => {
     if(!err) {
       res.send(files);
@@ -48,8 +48,10 @@ app.get('/images/all/location', (req, res) => {
 
       //after all readFile calls are finished
       Promise.all(promises).then(() => {
+        console.log("here");
         res.send(validImageNames);
       }).catch(err => res.status(500).send(err));
+      console.log(promises);
     }
     else {
       res.status(500).send();
@@ -77,11 +79,9 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
     exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
     exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude);
+    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude); //todo need to find way to store more precise conversion values
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = ConvertDMSToFormat(longitude);
-    
-    //todo need to find way to store more precise conversion values
 
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
@@ -117,10 +117,7 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var imgLat = imgExif.tags.GPSLatitude;
     var imgLong = imgExif.tags.GPSLongitude;
 
-    console.log(imgName + " being checked for location validitiy");
-
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
-      console.log(imgName + " is valid for images/all/location");
       validImageNames.push(imgName);
     }
   });
