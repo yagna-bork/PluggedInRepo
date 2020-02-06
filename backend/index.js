@@ -8,9 +8,13 @@ const dmsConversion = require('dms-conversion');
 // const parseDms = dmsConversion.parseDms;
 
 
-const userLatitude = 52.292016;
-const userLongitude = -1.532429;
-const radius = 20; //meters
+// const userLatitude = 52.292016;
+// const userLongitude = -1.532429;
+
+const userLatitude = 37.31682222222223;
+const userLongitude = -122.01681111111111;
+
+const radius = 10000; //meters
 const imagesDirPath = path.join(__dirname, 'images');
 
 const app = express();
@@ -91,7 +95,7 @@ app.post('/images', upload.single('image'), (req, res) => {
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
-    fs.writeFileSync(imgPath + '-location', newJpeg);
+    fs.writeFileSync(imgPath, newJpeg);
 
     console.log("new method allowed");
   }
@@ -140,21 +144,24 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var dataStr = data.toString("binary");
     var img = piexif.load(dataStr);
 
-    console.log(img);
-    console.log(imgName);
-    console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
-    console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
+    // console.log(img);
+    // console.log(imgName);
+    // console.log(img.GPS[piexif.GPSIFD.GPSLongitude]);
+    // console.log(img.GPS[piexif.GPSIFD.GPSLatitude]);
     // console.log("piexif long: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]));
-    // console.log(imgExif.tags.GPSLongitude);
+    // // console.log(imgExif.tags.GPSLongitude);
     // console.log("piexif lat: " + piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]));
-    // console.log(imgExif.tags.GPSLatitude);
+    // // console.log(imgExif.tags.GPSLatitude);
 
 
     // console.log(ConvertDMSToDD());
 
-    var imgLat = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]);
-    var imgLong = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]);
+    var imgLong = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLongitude], img.GPS[piexif.GPSIFD.GPSLongitudeRef]);
+    var imgLat = piexif.GPSHelper.dmsRationalToDeg(img.GPS[piexif.GPSIFD.GPSLatitude], img.GPS[piexif.GPSIFD.GPSLatitudeRef]);
     
+    // console.log("imgLat: " + imgLat);
+    // console.log("imgLong: " + imgLong);
+
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
       console.log(imgName + ": " + imgLat + "," + imgLong);
       validImageNames.push(imgName);
