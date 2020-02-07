@@ -35,6 +35,4 @@ class VerticalScrollView extends Component<Props, State> {
   }
 }
 
-
-
 export default VerticalScrollView;

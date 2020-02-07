@@ -33,24 +33,28 @@ var storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.get('/images/all', (req, res) => {
+  console.log("Call to /images/all (GET).");
   fs.readdir(imagesDirPath, (err, files) => {
     if(!err) {
+      console.log("Sending: ");
+      console.log(files);
       res.send(files);
     }
     else {
-      res.status(500).send();
+      console.log("Sending err (500): ");
+      console.log(err);
+      res.status(500).send(err);
     }
   });
 });
 
 app.get('/images/all/location', (req, res) => {
-  var imagesDirPath = path.join(__dirname, 'images');
+  console.log("Call to /images/all/location (GET).");
   fs.readdir(imagesDirPath, (err, imgNames) => {
     if(!err) {
+      console.log("Got image file names.");
       var promises = [];
       var validImageNames = [];
-
-      console.log("fetched images");
   
       for (var i = 0; i < imgNames.length; i++) {
         var imgName = imgNames[i];
@@ -58,25 +62,32 @@ app.get('/images/all/location', (req, res) => {
         promises.push(readFileAndCheckDistancePromise(imgName, imgPath, validImageNames));
       }
 
+      console.log("Dispatched all promises to check image files for location.");
+
       //after all readFile calls are finished
       Promise.all(promises).then(() => {
+        console.log("Sending files that are nearby to user: ");
+        console.log(validImageNames);
         res.send(validImageNames);
       }).catch(err => {
+        console.log("Err filtering files by location: ");
         console.log(err);
         res.status(500).send(err);
       });
     }
     else {
+      console.log("Err getting image files names: ");
+      console.log(err);
       res.status(500).send();
     }
   });
 });
 
 app.post('/images', upload.single('image'), (req, res) => {
+  console.log("Call to /images (POST).");
   if(req.file) {
-    console.log("/images: POST incoming file");
+    console.log("Uploaded file is valid: ");
     console.log(req.file);
-    console.log(req.body);
 
     //adding metadata to image
     var imgName = req.file.filename;
@@ -100,6 +111,7 @@ app.post('/images', upload.single('image'), (req, res) => {
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
     fs.writeFileSync(imgPath, newJpeg);
+    console.log("Saved file with location succesfully.");
   }
   res.send('Response from server');
 });
@@ -131,12 +143,13 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
     var imgLong = imgExif.tags.GPSLongitude;
 
     if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
-      // console.log("here");
+      console.log(imgName + " is nearby to user.");
       validImageNames.push(imgName);
     }
   }).catch(err => {
-    console.log("Ignoring following error images/all/location");
+    console.log("Err checking filtering " + imgName + " by location: ");
     console.log(err);
+    console.log("Ignored error.");
   });
 }
 
