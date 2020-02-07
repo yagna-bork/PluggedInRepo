@@ -23,7 +23,7 @@ class VerticalScrollView extends Component<Props, State> {
     var screenHeight = Dimensions.get('window').height;
 
     return (
-      <ScrollView decelerationRate={0} snapToInterval={screenHeight} snapToAlignment={"center"}>
+      <ScrollView decelerationRate={0} snapToInterval={screenHeight} snapToAlignment={"center"} showsVerticalScrollIndicator={false}>
         {this.props.imageUrls.map(url => {
           return <Image 
             style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
