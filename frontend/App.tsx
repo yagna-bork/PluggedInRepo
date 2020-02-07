@@ -45,7 +45,7 @@ var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null
 var defaultLocation = { ready: false, lat: -100000, long: -100000 };
 
 // var apiRootUrl = 'http://localhost:9000/';
-    var apiRootUrl = 'http://10.0.2.2:9000/';
+var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
 class App extends Component<Props, State> {
   constructor(props : Props) {
@@ -68,22 +68,8 @@ class App extends Component<Props, State> {
     });
     
     //ios
-    this.requestLocationPermission().then(() => {
-      this.getCurrentLocation();
-    }).then(() => {
-      console.log("state after location: ");
-      console.log(this.state);
-    }).catch(err => {
-      console.log("err location: ");
-      console.log(err);
-      console.log("api version: " + Platform.Version);
-    });
-
-    //android permissions
     // this.requestLocationPermission().then(() => {
     //   this.getCurrentLocation();
-    // }).then(() => {
-    //   this.requestCameraPermission();
     // }).then(() => {
     //   console.log("state after location: ");
     //   console.log(this.state);
@@ -92,6 +78,20 @@ class App extends Component<Props, State> {
     //   console.log(err);
     //   console.log("api version: " + Platform.Version);
     // });
+
+    //ANDROID permissions
+    this.requestLocationPermission().then(() => {
+      this.getCurrentLocation();
+    }).then(() => {
+      this.requestCameraPermission();
+    }).then(() => {
+      console.log("state after location: ");
+      console.log(this.state);
+    }).catch(err => {
+      console.log("err location: ");
+      console.log(err);
+      console.log("api version: " + Platform.Version);
+    });
   }
 
   getCurrentLocation() {

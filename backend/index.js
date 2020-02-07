@@ -134,6 +134,9 @@ var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames
       // console.log("here");
       validImageNames.push(imgName);
     }
+  }).catch(err => {
+    console.log("Ignoring following error images/all/location");
+    console.log(err);
   });
 }
 
