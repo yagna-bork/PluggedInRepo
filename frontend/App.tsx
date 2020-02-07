@@ -266,7 +266,7 @@ class App extends Component<Props, State> {
         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
           <Text>Upload</Text>
         </TouchableOpacity> */}
-        <VerticalScrollView imageUrls={this.state.imageUrls} />
+        <VerticalScrollView imageUrls={this.state.imageUrls}/>
       </View>
     );
   }
