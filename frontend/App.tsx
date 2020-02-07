@@ -8,8 +8,9 @@
 
 import React from 'react'
 import { Component } from 'react';
-import { PermissionsAndroid, Platform } from 'react-native';
 import HomeScreen from './components/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
   SafeAreaView,
@@ -19,7 +20,8 @@ import {
   Text,
   StatusBar,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  PermissionsAndroid, Platform
 } from 'react-native';
 
 
