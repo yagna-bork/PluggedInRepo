@@ -24,6 +24,18 @@ class VerticalScrollView extends Component<Props, State> {
 
     return (
       <ScrollView decelerationRate={0} snapToInterval={screenHeight} snapToAlignment={"center"}>
+        {
+          this.state.resultArray.map((item, key) => {
+          let src = this.state.foodList.find(food => +food.id === item).src;
+          return <Image key={key} style={{ flexDirection: "row" }} source={uri: src)} />;
+          })}
+
+        {this.props.imageUrls.map(url => {
+          return <Image 
+            style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
+            source={{uri: url}}
+          />
+        })}
         <Image
           style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
           source={{ uri: this.props.imageUrls[0] }}
@@ -36,5 +48,7 @@ class VerticalScrollView extends Component<Props, State> {
     );
   }
 }
+
+
 
 export default VerticalScrollView;
