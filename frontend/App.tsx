@@ -62,10 +62,10 @@ class App extends Component<Props, State> {
 
   componentDidMount() {
     this.fetchImages().then(() => {
-      console.log("state after fetching images: ");
+      console.log("State after fetching images from server: ");
       console.log(this.state);
     }).catch(err => {
-      console.log("err fetching images: ");
+      console.log("Err trying to fetch images: ");
       console.log(err);
     });
     
@@ -85,12 +85,11 @@ class App extends Component<Props, State> {
     }).then(() => {
       this.requestCameraPermission();
     }).then(() => {
-      console.log("state after location: ");
+      console.log("State after getting location of phone: ");
       console.log(this.state);
     }).catch(err => {
-      console.log("err location: ");
+      console.log("Err trying to get location from phone: ");
       console.log(err);
-      console.log("api version: " + Platform.Version);
     });
   }
 
@@ -173,8 +172,8 @@ class App extends Component<Props, State> {
 
   uploadImage() {
     this.getCurrentLocation().then(() => {
-      console.log("about to send: ");
-      console.log(this.state.location);
+      console.log("Trying to upload image to server. Current state is: ");
+      console.log(this.state);
       RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
         otherHeader: "foo",
@@ -188,10 +187,10 @@ class App extends Component<Props, State> {
           })
         }
       ]).then((resp) => {
-        console.log('resp from server after uploading images');
+        console.log('Response from server after uploading image: ');
         console.log(resp);
       }).catch((err) => {
-        console.log('err from server after uploading images');
+        console.log('Err trying to upload iamge to server: ');
         console.log(err);
       });
     });
@@ -199,7 +198,7 @@ class App extends Component<Props, State> {
 
   //android permissions
   async requestCameraPermission() {
-    console.log("inside camera permission");
+    console.log("Requesting camera poermissions.");
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -214,17 +213,19 @@ class App extends Component<Props, State> {
         },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
+        console.log('Camera permissions granted.');
       } else {
-        console.log('Camera permission denied');
+        console.log('Camera permission denied.');
       }
     } catch (err) {
+      console.log("Err trying to get camera permissions: ");
       console.warn(err);
     }
   }
 
   //android permissions
   async requestLocationPermission() {
+    console.log("Trying to get location permissions.");
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -244,6 +245,7 @@ class App extends Component<Props, State> {
         console.log('Location permission denied');
       }
     } catch (err) {
+      console.log("Err while trying to get location permission: ");
       console.log(err);
     }
   }
