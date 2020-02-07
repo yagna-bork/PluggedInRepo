@@ -20,10 +20,12 @@ class VerticalScrollView extends Component<Props, State> {
   }
 
   render() {
+    var screenHeight = Dimensions.get('window').height;
+
     return (
       <ScrollView>
         <Image
-          style={{ width: 100, height: 100 }}
+          style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
           source={{ uri: this.props.imageUrls[0] }}
         />
       </ScrollView>

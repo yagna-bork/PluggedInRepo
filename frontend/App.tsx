@@ -70,9 +70,7 @@ class App extends Component<Props, State> {
     });
     
     //IOS
-    this.requestLocationPermission().then(() => {
-      this.getCurrentLocation();
-    }).then(() => {
+    this.getCurrentLocation().then(() => {
       console.log("state after location: ");
       console.log(this.state);
     }).catch(err => {
