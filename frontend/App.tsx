@@ -9,6 +9,7 @@
 import React from 'react'
 import { Component } from 'react';
 import { PermissionsAndroid, Platform } from 'react-native';
+import VerticalScrollView from './components/VerticalScrollView';
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,6 +20,7 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
+
 
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -251,7 +253,7 @@ class App extends Component<Props, State> {
   render() {
     return (
       <View style={styles.sectionContainer} >
-        <Text>Test</Text>
+        {/* <Text>Test</Text>
         <Image
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.imageUrls[0] }}
@@ -260,14 +262,14 @@ class App extends Component<Props, State> {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         />
-        <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.selectImage.bind(this)}>
+        <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.selectImage.bind(this)}>
           <Text>Select</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ width: 200, height: 200 }} onPress={this.uploadImage.bind(this)}>
+        <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
           <Text>Upload</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        <VerticalScrollView imageUrls={this.state.imageUrls} />
       </View>
-
     );
   }
 } 

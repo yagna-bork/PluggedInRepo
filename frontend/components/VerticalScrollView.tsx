@@ -14,17 +14,21 @@ interface State {
 
 }
 
-export default class VerticalScrollView extends Component<Props, State> {
+class VerticalScrollView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
   }
 
   render() {
-    <ScrollView>
-      <Image
-        style={{ width: 100, height: 100 }}
-        source={{ uri: this.props.imageUrls[0] }}
-      />
-    </ScrollView>
+    return (
+      <ScrollView>
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={{ uri: this.props.imageUrls[0] }}
+        />
+      </ScrollView>
+    );
   }
 }
+
+export default VerticalScrollView;
