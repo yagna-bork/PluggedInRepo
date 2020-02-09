@@ -105,8 +105,6 @@ class UploadScreen extends Component<Props, State> {
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        console.log('image object: ');
-        console.log(response);
         const source = { uri: response.uri, data: response.data };
 
         this.setState({
@@ -197,7 +195,11 @@ class UploadScreen extends Component<Props, State> {
   render() {
     return (
       <View style={styles.sectionContainer}>
-        <Text>Upload</Text>
+        <Text>Upload One</Text>
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
+        />
         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.selectImage.bind(this)}>
           <Text>Select</Text>
         </TouchableOpacity>
