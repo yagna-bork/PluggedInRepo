@@ -188,6 +188,8 @@ PODS:
     - React
   - react-native-image-picker (2.2.1):
     - React
+  - react-native-safe-area-context (0.7.2):
+    - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
   - React-RCTAnimation (0.61.5):
@@ -223,6 +225,10 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
+  - RNCMaskedView (0.1.6):
+    - React
+  - RNScreens (2.0.0-beta.2):
+    - React
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -245,6 +251,7 @@ DEPENDENCIES:
   - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
   - React-RCTBlob (from `../node_modules/react-native/Libraries/Blob`)
@@ -256,6 +263,8 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -297,6 +306,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/geolocation"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   React-RCTActionSheet:
     :path: "../node_modules/react-native/Libraries/ActionSheetIOS"
   React-RCTAnimation:
@@ -317,6 +328,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
+  RNScreens:
+    :path: "../node_modules/react-native-screens"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -339,6 +354,7 @@ SPEC CHECKSUMS:
   react-native-fetch-blob: 0cbdf9764c75d9438c162427395f4bc35a857d5a
   react-native-geolocation: c956aeb136625c23e0dce0467664af2c437888c9
   react-native-image-picker: 23b053a5ac85fec5d95a6a2e3487c306682c12eb
+  react-native-safe-area-context: 4b3d1b9ebb040a4814a222703e7434b20c95fcf5
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -349,6 +365,8 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
+  RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
+  RNScreens: 5e4758109c6d35f9a009ce72af873df907548020
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
 PODFILE CHECKSUM: b9c468533750eb8b1d800dc6a6f543062be247fd

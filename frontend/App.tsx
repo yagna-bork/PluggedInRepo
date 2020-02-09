@@ -9,6 +9,7 @@
 import React from 'react'
 import { Component } from 'react';
 import HomeScreen from './components/HomeScreen';
+import UploadScren from './components/UploadScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -24,11 +25,6 @@ import {
   PermissionsAndroid, Platform
 } from 'react-native';
 
-
-import ImagePicker from 'react-native-image-picker';
-import RNFetchBlob from 'react-native-fetch-blob';
-import Geolocation from '@react-native-community/geolocation';
-
 import {
   Header,
   LearnMoreLinks,
@@ -36,31 +32,25 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Hello from './components/Hello';
 import { resolvePlugin } from '@babel/core';
 
+const Tab = createBottomTabNavigator();
+
 interface Props {}
-interface State {
-  imageUrls: string[],
-  uploadImage: { uri: string, data: string },
-  location: { ready: boolean, lat: number, long: number }
-}
-
-var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
-var defaultLocation = { ready: false, lat: -100000, long: -100000 };
-
-// var apiRootUrl = 'http://localhost:9000/'; //IOS
-var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+interface State { }
 
 class App extends Component<Props, State> {
   render() {
     return(
-      <View>
-        <HomeScreen/>
-      </View>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Upload" component={UploadScren} />
+        </Tab.Navigator>
+      </NavigationContainer>
     );
   }
-} 
+}
 
 const styles = StyleSheet.create({
   scrollView: {
