@@ -17,6 +17,12 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native';
+import { PermissionsAndroid, Platform } from 'react-native';
+
+import ImagePicker from 'react-native-image-picker';
+import RNFetchBlob from 'react-native-fetch-blob';
+import Geolocation from '@react-native-community/geolocation';
+
 
 interface Props {}
 interface State {
@@ -144,32 +150,6 @@ class UploadScreen extends Component<Props, State> {
           uploadImage: source
         });
       }
-    });
-  }
-
-  uploadImage() {
-    this.getCurrentLocation().then(() => {
-      console.log("Trying to upload image to server. Current state is: ");
-      console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
-        Authorization: "Bearer access-token",
-        otherHeader: "foo",
-        'Content-Type': 'multipart/form-data',
-      }, [
-        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
-        {
-          name: 'metadata', data: JSON.stringify({
-            lat: this.state.location.lat,
-            long: this.state.location.long
-          })
-        }
-      ]).then((resp) => {
-        console.log('Response from server after uploading image: ');
-        console.log(resp);
-      }).catch((err) => {
-        console.log('Err trying to upload iamge to server: ');
-        console.log(err);
-      });
     });
   }
 
