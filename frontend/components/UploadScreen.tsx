@@ -196,9 +196,13 @@ class UploadScreen extends Component<Props, State> {
   async takePicture() {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
-      const data = await this.camera.takePictureAsync(options);
-      console.log("Data from camera after taking picture.");
-      console.log(data.uri);
+      const data = this.camera.takePictureAsync(options).then(data => {
+        console.log("Data from camera after taking picture.");
+        console.log(data.uri);
+      }).catch(err => {
+        console.warn("Err trying to take picture.");
+        console.warn(err);
+      });
     }
     else {
       console.warn("Err trying to take picture.");
@@ -225,22 +229,6 @@ class UploadScreen extends Component<Props, State> {
           }}
           style={styles.preview}
           type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
-          androidCameraPermissionOptions={{
-            title: 'Permission to use camera',
-            message: 'We need your permission to use your camera',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          androidRecordAudioPermissionOptions={{
-            title: 'Permission to use audio recording',
-            message: 'We need your permission to use your audio',
-            buttonPositive: 'Ok',
-            buttonNegative: 'Cancel',
-          }}
-          onGoogleVisionBarcodesDetected={({ barcodes }) => {
-            console.log(barcodes);
-          }}
         />
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
