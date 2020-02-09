@@ -19,18 +19,17 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { useNavigation } from '@react-navigation/native';
 
 var apiRootUrl = 'http://localhost:9000/'; //IOS
 // var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
-
-interface Props {}
 
 interface State {
   imageUrls: string[]
 }
 
-class HomeScreen extends Component<Props, State> {
-  constructor(props: Props) {
+class HomeScreen extends Component {
+  constructor(props) {
     super(props);
 
     this.state = {

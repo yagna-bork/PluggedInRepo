@@ -41,11 +41,6 @@ interface State { }
 
 //refreshing homepage when you click on it
 function HomeScreenTab({ navigation }) {
-  navigation.addListener('tabPress', e => {
-    // Prevent default behavior
-    e.preventDefault();
-    console.log("Prevented");
-  });
   return (
     <HomeScreen/>
   );
@@ -56,8 +51,8 @@ class App extends Component<Props, State> {
     return(
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen}/>
-          <Tab.Screen name="Upload" component={UploadScren} />
+          <Tab.Screen name="Home" component={HomeScreenTab}/>
+          <Tab.Screen name="Upload" component={UploadScren}/>
         </Tab.Navigator>
       </NavigationContainer>
     );
