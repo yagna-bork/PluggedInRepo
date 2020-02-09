@@ -24,7 +24,9 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import Geolocation from '@react-native-community/geolocation';
 
 
-interface Props {}
+interface Props {
+  apiRootUrl: string
+}
 interface State {
   uploadImage: { uri: string, data: string },
   location: { ready: boolean, lat: number, long: number }
@@ -32,9 +34,6 @@ interface State {
 
 var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
 var defaultLocation = { ready: false, lat: -100000, long: -100000 };
-
-var apiRootUrl = 'http://localhost:9000/'; //IOS
-// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
 class UploadScreen extends Component<Props, State> {
   constructor(props: Props) {
@@ -111,8 +110,8 @@ class UploadScreen extends Component<Props, State> {
         const source = { uri: response.uri, data: response.data };
 
         this.setState({
-          imageUrls: this.state.imageUrls,
-          uploadImage: source
+          uploadImage: source,
+          location: this.state.location
         });
       }
     });
@@ -122,7 +121,7 @@ class UploadScreen extends Component<Props, State> {
     this.getCurrentLocation().then(() => {
       console.log("Trying to upload image to server. Current state is: ");
       console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
+      RNFetchBlob.fetch('POST', this.props.apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
         otherHeader: "foo",
         'Content-Type': 'multipart/form-data',
@@ -168,6 +167,30 @@ class UploadScreen extends Component<Props, State> {
     } catch (err) {
       console.log("Err while trying to get location permission: ");
       console.log(err);
+    }
+  }
+
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Cool Photo App Camera Permission',
+          message:
+            'Cool Photo App needs access to your camera ' +
+            'so you can take awesome pictures.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log('You can use the camera');
+      } else {
+        console.log('Camera permission denied');
+      }
+    } catch (err) {
+      console.warn(err);
     }
   }
 

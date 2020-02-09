@@ -47,7 +47,7 @@ class App extends Component<Props, State> {
     return(
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Home" component={HomeScreen}/>
           <Tab.Screen name="Upload" component={UploadScren} />
         </Tab.Navigator>
       </NavigationContainer>
