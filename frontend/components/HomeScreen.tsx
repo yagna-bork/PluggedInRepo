@@ -24,11 +24,12 @@ import { useNavigation } from '@react-navigation/native';
 var apiRootUrl = 'http://localhost:9000/'; //IOS
 // var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
+interface Props {}
 interface State {
   imageUrls: string[]
 }
 
-class HomeScreen extends Component {
+class HomeScreen extends Component<Props, State> {
   constructor(props) {
     super(props);
 
@@ -82,7 +83,7 @@ class HomeScreen extends Component {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         /> */}
-        <VerticalScrollView imageUrls={this.state.imageUrls} />
+        <VerticalScrollView imageUrls={this.state.imageUrls}/>
       </View>
     );
   }
