@@ -39,8 +39,17 @@ const Tab = createBottomTabNavigator();
 interface Props {}
 interface State { }
 
-var apiRootUrl = 'http://localhost:9000/'; //IOS
-// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+//refreshing homepage when you click on it
+function HomeScreenTab({ navigation }) {
+  navigation.addListener('tabPress', e => {
+    // Prevent default behavior
+    e.preventDefault();
+    console.log("Prevented");
+  });
+  return (
+    <HomeScreen/>
+  );
+}
 
 class App extends Component<Props, State> {
   render() {

@@ -39,6 +39,7 @@ class HomeScreen extends Component<Props, State> {
   }
 
   componentDidMount() {
+    console.log("HomeScreen mounted.");
     this.fetchImages().then(() => {
       console.log("State after fetching images from server: ");
       console.log(this.state);
