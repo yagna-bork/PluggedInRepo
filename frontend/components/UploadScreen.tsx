@@ -18,6 +18,7 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
+import { withNavigationFocus } from 'react-navigation'
 
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
@@ -36,7 +37,7 @@ interface State {
 var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
 var defaultLocation = { ready: false, lat: -100000, long: -100000 };
 
-class UploadScreen extends Component<Props, State> {
+class UploadScreen extends Component {
   constructor(props: Props) {
     super(props);
 
@@ -210,6 +211,8 @@ class UploadScreen extends Component<Props, State> {
   }
  
   render() {
+    const { isFocused } = this.props;
+
     return (
       <View style={styles.container}>
         {/* <Text>Upload One</Text>
@@ -223,13 +226,15 @@ class UploadScreen extends Component<Props, State> {
         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
           <Text>Upload</Text>
         </TouchableOpacity> */}
-        <RNCamera
-          ref={ref => {
-            this.camera = ref;
-          }}
-          style={styles.preview}
-          type={RNCamera.Constants.Type.back}
-        />
+        { 
+          isFocused && <RNCamera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style={styles.preview}
+            type={RNCamera.Constants.Type.back}
+          />
+        }
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
             <Text style={{ fontSize: 14 }}> SNAP </Text>
@@ -298,4 +303,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadScreen;
+export default withNavigationFocus(UploadScreen);
