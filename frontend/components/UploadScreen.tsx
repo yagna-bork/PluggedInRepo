@@ -23,10 +23,10 @@ import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
 import Geolocation from '@react-native-community/geolocation';
 
+var apiRootUrl = 'http://localhost:9000/'; //IOS
+// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
-interface Props {
-  apiRootUrl: string
-}
+interface Props {}
 interface State {
   uploadImage: { uri: string, data: string },
   location: { ready: boolean, lat: number, long: number }
@@ -121,7 +121,7 @@ class UploadScreen extends Component<Props, State> {
     this.getCurrentLocation().then(() => {
       console.log("Trying to upload image to server. Current state is: ");
       console.log(this.state);
-      RNFetchBlob.fetch('POST', this.props.apiRootUrl + 'images', {
+      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
         otherHeader: "foo",
         'Content-Type': 'multipart/form-data',

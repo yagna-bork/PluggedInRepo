@@ -20,9 +20,10 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-interface Props {
-  apiRootUrl: string
-}
+var apiRootUrl = 'http://localhost:9000/'; //IOS
+// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+
+interface Props {}
 
 interface State {
   imageUrls: string[]
@@ -49,10 +50,10 @@ class HomeScreen extends Component<Props, State> {
 
   fetchImages() {
     return new Promise((resolve, reject) => {
-      fetch(this.props.apiRootUrl + 'images/all/location').then(res => {
+      fetch(apiRootUrl + 'images/all/location').then(res => {
         res.json().then(imageNames => {
           var imageUrls: string[] = [];
-          var imageUrlRoot = this.props.apiRootUrl + 'images/';
+          var imageUrlRoot = apiRootUrl + 'images/';
 
           imageNames.forEach(imageName => {
             imageUrls.push(imageUrlRoot + imageName);
