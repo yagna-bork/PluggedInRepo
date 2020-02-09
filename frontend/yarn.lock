@@ -5151,6 +5151,12 @@ react-is@^16.12.0, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.4, react-i
   version "16.12.0"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
 
+react-native-camera@^3.17.0:
+  version "3.17.0"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.17.0.tgz#41b12b74ac9e806e86a6efb2a19319b40323f196"
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-fetch-blob@0.10.8:
   version "0.10.8"
   resolved "https://registry.yarnpkg.com/react-native-fetch-blob/-/react-native-fetch-blob-0.10.8.tgz#4fc256abae0cb5f10e7c41f28c11b3ff330d72a9"
