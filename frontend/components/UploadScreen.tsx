@@ -26,7 +26,6 @@ import Geolocation from '@react-native-community/geolocation';
 
 interface Props {}
 interface State {
-  imageUrls: string[],
   uploadImage: { uri: string, data: string },
   location: { ready: boolean, lat: number, long: number }
 }
@@ -42,29 +41,19 @@ class UploadScreen extends Component<Props, State> {
     super(props);
 
     this.state = {
-      imageUrls: [],
       uploadImage: emptyAvatarSource,
       location: defaultLocation
     }
   }
   
   componentDidMount() {
-    this.fetchImages().then(() => {
-      console.log("State after fetching images from server: ");
-      console.log(this.state);
-    }).catch(err => {
-      console.log("Err trying to fetch images: ");
-      console.log(err);
-    });
-
     //IOS
     this.getCurrentLocation().then(() => {
-      console.log("state after location: ");
+      console.log("State after getting location of phone: ");
       console.log(this.state);
     }).catch(err => {
-      console.log("err location: ");
+      console.log("Err trying to get location from phone: ");
       console.log(err);
-      console.log("api version: " + Platform.Version);
     });
 
     //ANDROID permissions
@@ -91,7 +80,6 @@ class UploadScreen extends Component<Props, State> {
 
       Geolocation.getCurrentPosition(position => {
         this.setState({
-          imageUrls: this.state.imageUrls,
           uploadImage: this.state.uploadImage,
           location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
         });
@@ -99,29 +87,6 @@ class UploadScreen extends Component<Props, State> {
       }, err => {
         reject(err);
       }, geoOptions);
-    });
-  }
-
-  fetchImages() {
-    return new Promise((resolve, reject) => {
-      fetch(apiRootUrl + 'images/all/location').then(res => {
-        res.json().then(imageNames => {
-          var imageUrls: string[] = [];
-          var imageUrlRoot = apiRootUrl + 'images/';
-
-          imageNames.forEach(imageName => {
-            imageUrls.push(imageUrlRoot + imageName);
-          });
-
-          this.setState({
-            imageUrls: imageUrls,
-            uploadImage: emptyAvatarSource
-          });
-          resolve();
-        });
-      }).catch((err) => {
-        reject(err);
-      });
     });
   }
 

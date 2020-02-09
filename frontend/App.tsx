@@ -39,6 +39,9 @@ const Tab = createBottomTabNavigator();
 interface Props {}
 interface State { }
 
+var apiRootUrl = 'http://localhost:9000/'; //IOS
+// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+
 class App extends Component<Props, State> {
   render() {
     return(

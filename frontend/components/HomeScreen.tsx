@@ -20,13 +20,53 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-interface Props {}
-interface State {}
+interface Props {
+  apiRootUrl: string
+}
+
+interface State {
+  imageUrls: string[]
+}
 
 class HomeScreen extends Component<Props, State> {
-  //hotfix file:///... -> remove file:// -> /...
-  stripImageUri(imageUri: string): string {
-    return imageUri.substring(7);
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      imageUrls: []
+    }
+  }
+
+  componentDidMount() {
+    this.fetchImages().then(() => {
+      console.log("State after fetching images from server: ");
+      console.log(this.state);
+    }).catch(err => {
+      console.log("Err trying to fetch images: ");
+      console.log(err);
+    });
+  }
+
+  fetchImages() {
+    return new Promise((resolve, reject) => {
+      fetch(this.props.apiRootUrl + 'images/all/location').then(res => {
+        res.json().then(imageNames => {
+          var imageUrls: string[] = [];
+          var imageUrlRoot = this.props.apiRootUrl + 'images/';
+
+          imageNames.forEach(imageName => {
+            imageUrls.push(imageUrlRoot + imageName);
+          });
+
+          this.setState({
+            imageUrls: imageUrls
+          });
+          resolve();
+        });
+      }).catch((err) => {
+        reject(err);
+      });
+    });
   }
 
   render() {
