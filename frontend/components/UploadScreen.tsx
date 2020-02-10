@@ -231,6 +231,9 @@ class UploadScreen extends Component<Props, State> {
           ref={ref => { this.camera = ref }}
           style={styles.preview}>
           <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity style={styles.capture}>
+              <Text>Select</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
               <Text style={{ fontSize: 14 }}> SNAP </Text>
             </TouchableOpacity>
@@ -317,6 +320,15 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingHorizontal: 20,
     alignSelf: 'center',
+    margin: 20,
+  },
+  galleryBtn: {
+    flex: 0,
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    padding: 15,
+    paddingHorizontal: 20,
+    alignSelf: "flex-start",
     margin: 20,
   },
 });
