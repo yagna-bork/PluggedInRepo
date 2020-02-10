@@ -9,7 +9,7 @@
 import React from 'react'
 import { Component } from 'react';
 import HomeScreen from './components/HomeScreen';
-import UploadScren from './components/UploadScreen';
+import UploadScreen from './components/UploadScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -51,8 +51,8 @@ class App extends Component<Props, State> {
     return(
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreenTab}/>
-          <Tab.Screen name="Upload" component={UploadScren}/>
+          <Tab.Screen name="Home" component={HomeScreenTab} />
+          <Tab.Screen name="Upload" component={UploadScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     );

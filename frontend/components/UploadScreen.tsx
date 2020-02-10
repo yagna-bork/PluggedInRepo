@@ -210,30 +210,27 @@ class UploadScreen extends Component {
     }
   }
  
-  render() {
-    const { isFocused } = this.props;
+  renderCamera = () => {
+    console.log("Rendering camera");
+    const isActive = this.props.navigation.isFocused()
+    if (isActive == true) {
+      return (
+        <RNCamera ref={ref => { this.camera = ref }}
+          onBarCodeRead={e => this._handleScanCode(e)}
+          style={styles.preview}>
+          ...
+      </RNCamera>
+      )
+    } else {
+      return null
+    }
+  }
 
+  render() {
     return (
       <View style={styles.container}>
-        {/* <Text>Upload One</Text>
-        <Image
-          style={{ width: 100, height: 100 }}
-          source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
-        />
-        <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.selectImage.bind(this)}>
-          <Text>Select</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
-          <Text>Upload</Text>
-        </TouchableOpacity> */}
         {
-          isFocused && <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            style={styles.preview}
-            type={RNCamera.Constants.Type.back}
-          />
+          this.renderCamera()
         }
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
@@ -244,6 +241,18 @@ class UploadScreen extends Component {
     );
   }
 }
+
+// {/* <Text>Upload One</Text>
+//         <Image
+//           style={{ width: 100, height: 100 }}
+//           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
+//         />
+//         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.selectImage.bind(this)}>
+//           <Text>Select</Text>
+//         </TouchableOpacity>
+//         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
+//           <Text>Upload</Text>
+//         </TouchableOpacity> */}
 
 const styles = StyleSheet.create({
   scrollView: {
