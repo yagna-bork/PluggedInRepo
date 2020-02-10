@@ -25,8 +25,8 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import Geolocation from '@react-native-community/geolocation';
 import { RNCamera } from 'react-native-camera';
 
-// var apiRootUrl = 'http://localhost:9000/'; //IOS
-var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+var apiRootUrl = 'http://localhost:9000/'; //IOS
+// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
 interface Props {}
 interface State {
@@ -49,26 +49,26 @@ class UploadScreen extends Component<Props, State> {
   
   componentDidMount() {
     //IOS
-    // this.getCurrentLocation().then(() => {
-    //   console.log("State after getting location of phone: ");
-    //   console.log(this.state);
-    // }).catch(err => {
-    //   console.log("Err trying to get location from phone: ");
-    //   console.log(err);
-    // });
-
-    //ANDROID permissions
-    this.requestLocationPermission().then(() => {
-      this.getCurrentLocation();
-    }).then(() => {
-      this.requestCameraPermission();
-    }).then(() => {
+    this.getCurrentLocation().then(() => {
       console.log("State after getting location of phone: ");
       console.log(this.state);
     }).catch(err => {
       console.log("Err trying to get location from phone: ");
       console.log(err);
     });
+
+    //ANDROID permissions
+    // this.requestLocationPermission().then(() => {
+    //   this.getCurrentLocation();
+    // }).then(() => {
+    //   this.requestCameraPermission();
+    // }).then(() => {
+    //   console.log("State after getting location of phone: ");
+    //   console.log(this.state);
+    // }).catch(err => {
+    //   console.log("Err trying to get location from phone: ");
+    //   console.log(err);
+    // });
   }
 
   getCurrentLocation() {
