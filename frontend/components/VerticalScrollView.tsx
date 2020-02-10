@@ -25,7 +25,7 @@ class VerticalScrollView extends Component<Props, State> {
     return (
       <ScrollView decelerationRate={0} snapToInterval={screenHeight} snapToAlignment={"center"} showsVerticalScrollIndicator={false}>
         {this.props.imageUrls.map(url => {
-          return <Image 
+          return <Image
             style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
             source={{uri: url}}
           />
