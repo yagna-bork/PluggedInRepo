@@ -37,7 +37,7 @@ interface State {
 var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
 var defaultLocation = { ready: false, lat: -100000, long: -100000 };
 
-class UploadScreen extends Component {
+class UploadScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -198,8 +198,16 @@ class UploadScreen extends Component {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
       const data = this.camera.takePictureAsync(options).then(data => {
-        console.log("Data from camera after taking picture.");
-        console.log(data.uri);
+        const source = { uri: response.uri, data: response.data };
+
+        this.setState({
+          uploadImage: source,
+          location: this.state.location
+        });
+
+        console.log("Picture taken successfully. State after taking picture: ");
+        console.log(this.state);
+
       }).catch(err => {
         console.warn("Err trying to take picture.");
         console.warn(err);
@@ -309,4 +317,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigationFocus(UploadScreen);
+// export default withNavigationFocus(UploadScreen);
+export default UploadScreen;
