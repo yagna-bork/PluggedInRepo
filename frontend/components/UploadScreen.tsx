@@ -116,10 +116,10 @@ class UploadScreen extends Component<Props, State> {
 
         console.log("State after getting image from gallery: ");
         console.log(this.state);
+
+        console.log("About to upload image selected from gallery.");
+        this.uploadImage();
       }
-    }).then(() => {
-      console.log("About to upload image selected from gallery.");
-      this.uploadImage();
     });
   }
 
