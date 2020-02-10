@@ -207,7 +207,12 @@ class UploadScreen extends Component<Props, State> {
 
         console.log("Picture taken successfully. State after taking picture: ");
         console.log(this.state);
-      }).catch(err => {
+
+
+      }).then(() => {
+        this.uploadImage();
+      })
+      .catch(err => {
         console.warn("Err trying to take picture. Camera handler exists.");
         console.warn(err);
       });
