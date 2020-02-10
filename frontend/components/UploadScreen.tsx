@@ -226,7 +226,7 @@ class UploadScreen extends Component {
         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
           <Text>Upload</Text>
         </TouchableOpacity> */}
-        { 
+        {
           isFocused && <RNCamera
             ref={ref => {
               this.camera = ref;
