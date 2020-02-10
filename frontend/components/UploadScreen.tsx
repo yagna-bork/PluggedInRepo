@@ -230,6 +230,11 @@ class UploadScreen extends Component<Props, State> {
         <RNCamera 
           ref={ref => { this.camera = ref }}
           style={styles.preview}>
+          <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
+              <Text style={{ fontSize: 14 }}> SNAP </Text>
+            </TouchableOpacity>
+          </View>
       </RNCamera>
       )
     } else {
@@ -241,11 +246,6 @@ class UploadScreen extends Component<Props, State> {
     return (
       <View style={styles.container}>
         { this.renderCamera() }
-        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-          <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-            <Text style={{ fontSize: 14 }}> SNAP </Text>
-          </TouchableOpacity>
-        </View>
       </View>
     );
   }
