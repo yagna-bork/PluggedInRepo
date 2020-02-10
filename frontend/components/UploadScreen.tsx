@@ -113,7 +113,13 @@ class UploadScreen extends Component<Props, State> {
           uploadImage: source,
           location: this.state.location
         });
+
+        console.log("State after getting image from gallery: ");
+        console.log(this.state);
       }
+    }).then(() => {
+      console.log("About to upload image selected from gallery.");
+      this.uploadImage();
     });
   }
 
@@ -231,8 +237,8 @@ class UploadScreen extends Component<Props, State> {
           ref={ref => { this.camera = ref }}
           style={styles.preview}>
           <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-            <TouchableOpacity style={styles.capture}>
-              <Text>Select</Text>
+            <TouchableOpacity style={styles.capture} onPress={this.selectImage.bind(this)}>
+              <Text>Gallery</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
               <Text style={{ fontSize: 14 }}> SNAP </Text>
