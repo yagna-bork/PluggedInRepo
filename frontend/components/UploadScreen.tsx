@@ -197,8 +197,8 @@ class UploadScreen extends Component<Props, State> {
   async takePicture() {
     if (this.camera) {
       const options = { quality: 0.5, base64: true };
-      const data = this.camera.takePictureAsync(options).then(data => {
-        const source = { uri: response.uri, data: response.data };
+      const data = this.camera.takePictureAsync(options).then(img => {
+        const source = { uri: img.uri, data: img.base64 };
 
         this.setState({
           uploadImage: source,
@@ -207,9 +207,8 @@ class UploadScreen extends Component<Props, State> {
 
         console.log("Picture taken successfully. State after taking picture: ");
         console.log(this.state);
-
       }).catch(err => {
-        console.warn("Err trying to take picture.");
+        console.warn("Err trying to take picture. Camera handler exists.");
         console.warn(err);
       });
     }
