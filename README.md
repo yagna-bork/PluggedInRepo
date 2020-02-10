@@ -17,6 +17,13 @@ New branch for
 * New feature
 * Fixing bug
 
+Naming conventions
+* git branch <parent-branch/feat || bug>
+
+
+Going back branches
+* git revert <commit name>
+
 Merge with master into branch, resolve dependencies, then merge branch into master
 
 # Sprint record
