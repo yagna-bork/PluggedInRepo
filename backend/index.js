@@ -6,6 +6,7 @@ const multer = require('multer');
 const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
 const crypto = require('crypto');
+const mongo = require('mongodb');
 // const parseDms = dmsConversion.parseDms;
 
 
@@ -31,6 +32,35 @@ var storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
+
+app.get('/', (req, res) => {
+  var MongoClient = mongo.MongoClient;
+  var url = 'mongodb://localhost:27017/pluggedInDb';
+  MongoClient.connect(url, (err, db) => {
+    if(!err) {
+      console.log("Connection to db established in /");
+
+      var collection = db.collection('test');
+      collection.find({}).toArray((err, result) => {
+        if(err) {
+          console.warn("Err trying to query collection", err);
+        }
+        else if(result.length) {
+          res.send(result);
+        }
+        else {
+          console.log("No data in collection.");
+          res.send();
+        }
+      });
+    }
+    else {
+      console.warn("Error trying to connect to db in /", err);
+    }
+
+    db.close();
+  })
+});
 
 app.get('/images/all', (req, res) => {
   console.log("Call to /images/all (GET).");
