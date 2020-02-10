@@ -215,10 +215,9 @@ class UploadScreen extends Component {
     const isActive = this.props.navigation.isFocused()
     if (isActive == true) {
       return (
-        <RNCamera ref={ref => { this.camera = ref }}
-          onBarCodeRead={e => this._handleScanCode(e)}
+        <RNCamera 
+          ref={ref => { this.camera = ref }}
           style={styles.preview}>
-          ...
       </RNCamera>
       )
     } else {
@@ -229,9 +228,7 @@ class UploadScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {
-          this.renderCamera()
-        }
+        { this.renderCamera() }
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
           <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
             <Text style={{ fontSize: 14 }}> SNAP </Text>
