@@ -35,7 +35,7 @@ const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   var MongoClient = mongo.MongoClient;
-  var url = 'mongodb://localhost:27017/pluggedInDb';
+  var url = 'mongodb://localhost:27017/exampleDb';
   MongoClient.connect(url, (err, db) => {
     if(!err) {
       console.log("Connection to db established in /");
@@ -55,7 +55,8 @@ app.get('/', (req, res) => {
       });
     }
     else {
-      console.warn("Error trying to connect to db in /", err);
+      console.warn("Error trying to connect to db in /: ");
+      console.warn(err);
     }
 
     db.close();
