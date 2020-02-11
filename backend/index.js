@@ -35,12 +35,15 @@ const upload = multer({ storage: storage });
 const Test = require('./models/Test');
 mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true
-}).then(() => console.log("MongoDB connected in /."))
+}).then(() => console.log("MongoDB connected."))
 .catch(err => console.warn("Err trying to connection to MongoDb in /.\n", err));
 
 app.get('/', (req, res) => {
-  Test.find().then(items => res.send(items))
-  .catch(err => console.log("Err trying to get item in /", err));
+  console.log("Call to GET:/");
+  Test.find().then(items => {
+    console.log("Retrieveding items:", items);
+    res.send(items);
+  }).catch(err => console.log("Err trying to get item in /", err));
 });
 
 app.get('/images/all', (req, res) => {
