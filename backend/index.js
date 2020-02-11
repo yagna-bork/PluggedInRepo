@@ -33,7 +33,7 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const Test = require('./models/Test');
-mongoose.connect('mongodb://mongo:27017/docker-node-mongo', {
+mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true
 }).then(() => console.log("MongoDB connected in /."))
 .catch(err => console.warn("Err trying to connection to MongoDb in /.\n", err));
