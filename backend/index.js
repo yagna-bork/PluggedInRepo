@@ -35,11 +35,13 @@ const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   var MongoClient = mongo.MongoClient;
-  var url = 'mongodb://localhost:27017/exampleDb';
-  MongoClient.connect(url, (err, db) => {
+  var url = 'mongodb://localhost:27017';
+  
+  MongoClient.connect(url, (err, client) => {
     if(!err) {
       console.log("Connection to db established in /");
 
+      var db = client.db('pluggedInDb');
       var collection = db.collection('test');
       collection.find({}).toArray((err, result) => {
         if(err) {
@@ -59,7 +61,7 @@ app.get('/', (req, res) => {
       console.warn(err);
     }
 
-    db.close();
+    client.close();
   })
 });
 
