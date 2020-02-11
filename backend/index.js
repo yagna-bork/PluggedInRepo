@@ -6,7 +6,7 @@ const multer = require('multer');
 const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
 const crypto = require('crypto');
-const mongo = require('mongodb');
+const mongoose = require('mongoose');
 // const parseDms = dmsConversion.parseDms;
 
 
@@ -32,37 +32,15 @@ var storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
+const Test = require('./models/Test');
+mongoose.connect('mongodb://mongo:27017/docker-node-mongo', {
+  useNewUrlParser: true
+}).then(() => console.log("MongoDB connected in /."))
+.catch(err => console.warn("Err trying to connection to MongoDb in /.\n", err));
 
 app.get('/', (req, res) => {
-  var MongoClient = mongo.MongoClient;
-  var url = 'mongodb://localhost:27017';
-  
-  MongoClient.connect(url, (err, client) => {
-    if(!err) {
-      console.log("Connection to db established in /");
-
-      var db = client.db('pluggedInDb');
-      var collection = db.collection('test');
-      collection.find({}).toArray((err, result) => {
-        if(err) {
-          console.warn("Err trying to query collection", err);
-        }
-        else if(result.length) {
-          res.send(result);
-        }
-        else {
-          console.log("No data in collection.");
-          res.send();
-        }
-      });
-    }
-    else {
-      console.warn("Error trying to connect to db in /: ");
-      console.warn(err);
-    }
-
-    client.close();
-  })
+  Test.find().then(items => res.send(items))
+  .catch(err => console.log("Err trying to get item in /", err));
 });
 
 app.get('/images/all', (req, res) => {
