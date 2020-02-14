@@ -21,8 +21,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { useNavigation } from '@react-navigation/native';
 
-var apiRootUrl = 'http://localhost:9000/'; //IOS
-// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+// var apiRootUrl = 'http://localhost:9000/'; //IOS
+var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
 interface Props {}
 interface State {
