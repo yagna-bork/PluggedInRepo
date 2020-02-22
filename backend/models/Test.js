@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const TestSchema = new schema({
-  name: {
-    type: String,
-    required: true
-  },
-});
+const TestSchema = new Schema({
+  name: 'string'
+}, { collection: 'test' });
 
 module.exports = Test = mongoose.model('test', TestSchema);
