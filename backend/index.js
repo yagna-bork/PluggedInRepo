@@ -39,22 +39,25 @@ mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
 }).then(() => console.log("MongoDB connected"))
 .catch(err => console.warn("Err trying to connection to MongoDb. \n", err));
 
-app.get('/', (req, res) => {
-  console.log("Call to GET:/");
-  Test.create({name: "test1"}, (err, doc) => {
-    if(!err) {
-      console.log("added following doc to db: ", doc);
+app.get('/db', (req, res) => {
+  console.log("Call to GET:/db");
+  Test.find({}).exec((err, docs) => {
+    if (!err) {
+      console.log("Retrieving items from db:", docs);
+      res.send(docs);
+    }
+    else {
+      console.warn("err trying to get collection in /db.");
+      res.status(500).send(err);
+    }
+  });
+});
 
-      Test.find({}).exec((err, docs) => {
-        if (!err) {
-          console.log("Retrieving items from db v5:", docs);
-          res.send(docs);
-        }
-        else {
-          console.warn("err trying to get collection in /.");
-          res.status(500).send(err);
-        }
-      });
+//make this a post
+app.get('/db', (req, res) => {
+  Test.create({ name: "test1" }, (err, doc) => {
+    if (!err) {
+      console.log("added following doc to db: ", doc);
     }
     else {
       console.warn("err trying to create doc in /.");
