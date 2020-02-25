@@ -16,4 +16,4 @@ services:
     ports: 
       - '27017:27017'
     volumes:
-      - ./:/usr/src/app/data
+      - './data:/usr/src/app/data'
