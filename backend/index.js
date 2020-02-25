@@ -6,6 +6,8 @@ const multer = require('multer');
 const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
+
 // const parseDms = dmsConversion.parseDms;
 
 
@@ -31,6 +33,39 @@ var storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage: storage });
+const Test = require('./models/Test');
+mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
+  useNewUrlParser: true
+}).then(() => console.log("MongoDB connected"))
+.catch(err => console.warn("Err trying to connection to MongoDb. \n", err));
+
+app.get('/db', (req, res) => {
+  console.log("Call to GET:/db");
+  Test.find({}).exec((err, docs) => {
+    if (!err) {
+      console.log("Retrieving items from db:", docs);
+      res.send(docs);
+    }
+    else {
+      console.warn("err trying to get collection in /db.");
+      res.status(500).send(err);
+    }
+  });
+});
+
+//make this a post
+app.get('/db/create', (req, res) => {
+  Test.create({ name: "test1" }, (err, doc) => {
+    if (!err) {
+      console.log("added following doc to db: ", doc);
+      res.send({'created': doc});
+    }
+    else {
+      console.warn("err trying to create doc in /.");
+      res.status(500).send(err);
+    }
+  });
+});
 
 app.get('/images/all', (req, res) => {
   console.log("Call to /images/all (GET).");

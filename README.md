@@ -5,6 +5,7 @@
 * debug android: cmd+m
 * git push -d origin <name of remote branch>
 * docker run -it -p 9000:3000 -v $(pwd):/usr/src/app pluggedin-backend-image
+* docker exec -it 1cb9720c3917 /bin/bash
 * lsof -t -i:8081
 
 * CocoaPods could not find compatible versions for pod "React/Core": change to s.dependency 'React-Core' in react-native-fetch-blob.podspec
@@ -16,6 +17,13 @@ Commit frequent
 New branch for
 * New feature
 * Fixing bug
+
+Naming conventions
+* git branch <parent-branch/feat || bug>
+
+
+Going back branches
+* git revert <commit name>
 
 Merge with master into branch, resolve dependencies, then merge branch into master
 
