@@ -53,7 +53,7 @@ app.get('/db', (req, res) => {
   });
 });
 
-//make this a post
+//todo: make this a post
 app.get('/db/create', (req, res) => {
   Test.create({ name: "test1" }, (err, doc) => {
     if (!err) {
@@ -118,6 +118,7 @@ app.get('/images/all/location', (req, res) => {
   });
 });
 
+//new image posted
 app.post('/images', upload.single('image'), (req, res) => {
   console.log("Call to /images (POST).");
   if(req.file) {
