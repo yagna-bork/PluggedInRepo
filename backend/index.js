@@ -54,7 +54,7 @@ app.get('/db', (req, res) => {
 });
 
 //make this a post
-app.get('/db', (req, res) => {
+app.get('/db/create', (req, res) => {
   Test.create({ name: "test1" }, (err, doc) => {
     if (!err) {
       console.log("added following doc to db: ", doc);
