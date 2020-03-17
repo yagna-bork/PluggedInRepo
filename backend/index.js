@@ -110,19 +110,17 @@ app.get('/images/all/location', (req, res) => {
 });
 
 //get replies to a given image
-app.get('/images/all/location', (req, res) => {
+app.get('/images/reply', (req, res) => {
   console.log("Call to /images/all/location (GET).");
 
+  var parentId = req.body.parentId;
+
   //query database for paths
-  Image.find(query).exec((err, imgs) => {
+  Image.find({ _id: parentId}, { replies: 1 }).exec((err, replies) => {
     if (!err) {
-      console.log("Retrieving items from db:", imgs);
-      var imageWithReplies = imgs.map(img => {
-        var repliesPathOnly = img.replies.map(reply => reply.path);
-        console.log(img.replies)
-        return { "_id": img._id, "path": img.path, "replies": repliesPathOnly };
-      });
-      res.json(imageWithReplies);
+      console.log("Retrieving items from db:", replies);
+      var repliesPathOnly = replies.map(reply => reply.path);
+      res.json(repliesPathOnly);
     }
     else {
       console.warn("err trying to get images in /images/all/location.", err);
