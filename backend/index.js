@@ -86,37 +86,13 @@ app.get('/images/all', (req, res) => {
 
 app.get('/images/all/location', (req, res) => {
   console.log("Call to /images/all/location (GET).");
-  fs.readdir(imagesDirPath, (err, imgNames) => {
-    if(!err) {
-      console.log("Got image file names.");
-      var promises = [];
-      var validImageNames = [];
-  
-      for (var i = 0; i < imgNames.length; i++) {
-        var imgName = imgNames[i];
-        var imgPath = path.join(imagesDirPath, imgName);
-        promises.push(readFileAndCheckDistancePromise(imgName, imgPath, validImageNames));
-      }
 
-      console.log("Dispatched all promises to check image files for location.");
-
-      //after all readFile calls are finished
-      Promise.all(promises).then(() => {
-        console.log("Sending files that are nearby to user: ");
-        console.log(validImageNames);
-        res.send(validImageNames);
-      }).catch(err => {
-        console.log("Err filtering files by location: ");
-        console.log(err);
-        res.status(500).send(err);
-      });
-    }
-    else {
-      console.log("Err getting image files names: ");
-      console.log(err);
-      res.status(500).send();
-    }
-  });
+//   [
+//     '8d9eb4f243818462486c4b4a335800d41583915034688.jpg',
+//      '64c49688d7ee67639cea0ce8a16add6c1583915140584.jpg',
+//      '7c25aa15c7e3758339233ab94e03da1b1581685833120.jpg',
+//      'ad163391aa21b0edbebeefd361d27f0b1581685809274.jpg'
+//  ]
 });
 
 //new image posted
@@ -157,13 +133,13 @@ app.post('/images/new', (req, res) => {
   //take image
   console.log(req);
   var imgName = req.body.filename;
-  var imgPath = path.join(imagesDirPath, imgName);
+  // var imgPath = path.join(imagesDirPath, imgName);
   var lat = JSON.parse(req.body.metadata).lat;
   var long = JSON.parse(req.body.metadata).long;
 
   //insert image in to db
   const location = { type: 'Point', coordinates: [long, lat] }
-  Image.create({ path: imgPath, location: location }, (err, doc) => {
+  Image.create({ path: imgName, location: location }, (err, doc) => {
     if (!err) {
       console.log("added following doc to Image collection: ", doc);
       res.send({ 'created': doc });
