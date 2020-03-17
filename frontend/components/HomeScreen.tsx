@@ -47,14 +47,6 @@ class HomeScreen extends Component<Props, State> {
       console.log("Err trying to fetch images: ");
       console.log(err);
     });
-    this.fetchReplies("5e713d633f8d8400b0077d4c").then(() => {
-      // console.log("State after fetching replies from server: ");
-      // console.log(this.state);
-      console.log("Done fetching replies from server.");
-    }).catch(err => {
-      console.log("Err trying to fetch replies: ");
-      console.log(err);
-    });
   }
 
   fetchImages() {
@@ -89,30 +81,6 @@ class HomeScreen extends Component<Props, State> {
     });
   }
 
-  fetchReplies(parentId: string) {
-    return new Promise((resolve, reject) => {
-      fetch(apiRootUrl + `images/reply?parentId=${encodeURIComponent(parentId)}`).then(res => {
-        res.json().then(replyNames => {
-          var replyUrls: string[] = [];
-          var imageUrlRoot = apiRootUrl + 'images/';
-
-          replyNames.forEach(replyName => {
-            replyUrls.push(imageUrlRoot + replyName);
-          });
-
-
-          //do something with them
-          console.log("fetchReplies: ", replyUrls); 
-          resolve();
-        }).catch(err => {
-          reject(err);
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
- 
   render() {
     return (
       <View style={styles.sectionContainer} >
@@ -125,7 +93,7 @@ class HomeScreen extends Component<Props, State> {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         /> */}
-        <VerticalScrollView images={this.state.images}/>
+        <VerticalScrollView images={this.state.images} apiRootUrl={apiRootUrl}/>
       </View>
     );
   }
