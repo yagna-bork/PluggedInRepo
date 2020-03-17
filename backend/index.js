@@ -97,10 +97,11 @@ app.get('/images/all/location', (req, res) => {
       }
     }
   };
-  Image.find(query).exec((err, imgs) => {
+  Image.find(query, { path: 1, _id: 0 }).exec((err, imgs) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
-      res.json(imgs);
+      var paths = imgs.map(obj => obj.path);
+      res.json(paths);
     }
     else {
       console.warn("err trying to get images in /images/all/location.", err);
