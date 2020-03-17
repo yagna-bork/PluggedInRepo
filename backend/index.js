@@ -153,10 +153,10 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
 
     //only need name for replies, no location
     var imgName = req.file.filename;
-    var parentId = req.body.parentId;
+    var parentId = JSON.parse(req.body.metadata).parentId;
     
     //insert reply in to db
-    Image.update({_id: parentId}, { $push: { 'replies': { path: imgName }}}).exec((err, reply) => {
+    Image.updateOne({_id: parentId}, { $push: { 'replies': { path: imgName }}}).exec((err, reply) => {
       if (!err) {
         console.log('Succesfully added reply: ', reply);
         res.json(reply);

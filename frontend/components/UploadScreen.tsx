@@ -127,7 +127,7 @@ class UploadScreen extends Component<Props, State> {
     this.getCurrentLocation().then(() => {
       console.log("Trying to upload image to server. Current state is: ");
       console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
+      RNFetchBlob.fetch('POST', apiRootUrl + 'images/replies', { //Replies CHANGED
         Authorization: "Bearer access-token",
         otherHeader: "foo",
         'Content-Type': 'multipart/form-data',
@@ -136,7 +136,8 @@ class UploadScreen extends Component<Props, State> {
         {
           name: 'metadata', data: JSON.stringify({
             lat: this.state.location.lat,
-            long: this.state.location.long
+            long: this.state.location.long,
+            parentId: "5e7119201b53d905b43b255c",//Replies CHANGED
           })
         }
       ]).then((resp) => {
