@@ -9,7 +9,8 @@ import {
   Text,
   StatusBar,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import {
@@ -21,7 +22,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { useNavigation } from '@react-navigation/native';
 
-var apiRootUrl = 'http://localhost:9000/'; //IOS
+var apiRootUrl = Platform.OS === 'ios' ? 'http://localhost:9000/' : 'http://10.0.2.2:9000/';
 // var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
 interface Props {}
