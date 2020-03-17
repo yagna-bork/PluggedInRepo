@@ -81,14 +81,7 @@ class HomeScreen extends Component<Props, State> {
 
   fetchReplies(parentId: string) {
     return new Promise((resolve, reject) => {
-      var data = {
-        method: 'GET',
-        body: JSON.stringify({
-          "parentId": "5e713d6e3f8d8400b0077d4d"
-        })
-      };
-
-      fetch(apiRootUrl + 'images/reply', data).then(res => {
+      fetch(apiRootUrl + `images/reply?parentId=${encodeURIComponent(parentId)}`).then(res => {
         res.json().then(replyNames => {
           var replyUrls: string[] = [];
           var imageUrlRoot = apiRootUrl + 'images/';
