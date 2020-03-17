@@ -7,6 +7,7 @@ const piexif = require("piexifjs");
 const dmsConversion = require('dms-conversion');
 const crypto = require('crypto');
 const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 // const parseDms = dmsConversion.parseDms;
 
@@ -32,6 +33,7 @@ var storage = multer.diskStorage({
     });
   }
 });
+
 const upload = multer({ storage: storage });
 const Test = require('./models/Test');
 const Image = require('./models/Image');
@@ -39,6 +41,8 @@ mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true
 }).then(() => console.log("MongoDB connected"))
 .catch(err => console.warn("Err trying to connection to MongoDb. \n", err));
+
+app.use(bodyParser.json())
 
 app.get('/db', (req, res) => {
   console.log("Call to GET:/db");
@@ -111,15 +115,17 @@ app.get('/images/all/location', (req, res) => {
 
 //get replies to a given image
 app.get('/images/reply', (req, res) => {
-  console.log("Call to /images/all/location (GET).");
+  console.log("Call to /images/reply (GET).");
 
   var parentId = req.body.parentId;
+  console.log("parentId inside images/reply: ", parentId);
 
   //query database for paths
-  Image.find({ _id: parentId}, { replies: 1 }).exec((err, replies) => {
+  Image.findOne({ _id: parentId}, { replies: 1 }).exec((err, img) => {
     if (!err) {
-      console.log("Retrieving items from db:", replies);
-      var repliesPathOnly = replies.map(reply => reply.path);
+      console.log("Retrieving items from db:", img);
+      var repliesPathOnly = img.replies.map(reply => reply.path);
+      console.log("About to send in /images/reply", repliesPathOnly);
       res.json(repliesPathOnly);
     }
     else {
