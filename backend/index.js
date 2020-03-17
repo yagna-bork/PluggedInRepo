@@ -129,7 +129,7 @@ app.get('/images/reply', (req, res) => {
       res.json(repliesPathOnly);
     }
     else {
-      console.warn("err trying to get images in /images/all/location.", err);
+      console.warn("err trying to get images in /images/reply.", err);
       res.status(500).send(err);
     }
   });
