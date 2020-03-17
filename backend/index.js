@@ -132,24 +132,24 @@ app.post('/images', upload.single('image'), (req, res) => {
     var lat = JSON.parse(req.body.metadata).lat;
     var long = JSON.parse(req.body.metadata).long;
 
-    const { longitude, latitude } = ConvertDDToDMS(lat, long);
-
-    var jpeg = fs.readFileSync(imgPath);
-    var data = jpeg.toString("binary");
-    var exifObj = piexif.load(data);
-    exifObj["GPS"][piexif.GPSIFD.GPSVersionID] = [7, 7, 7, 7];
-    exifObj["GPS"][piexif.GPSIFD.GPSDateStamp] = "1999:99:99 99:99:99";
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitudeRef] = lat < 0 ? 'S' : 'N';
-    exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude); //todo need to find way to store more precise conversion values
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
-    exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = ConvertDMSToFormat(longitude);
+    //insert image in to db
+    const location = { type: 'Point', coordinates: [long, lat] }
+    Image.create({ path: imgPath, location: location }, (err, doc) => {
+      if (!err) {
+        console.log("added following doc to Image collection: ", doc);
+        res.send({ 'created': doc });
+      }
+      else {
+        console.warn("err trying to create doc in /images/new.");
+        res.status(500).send(err);
+      }
+    });
     
-    var exifbytes = piexif.dump(exifObj);
-    var newData = piexif.insert(exifbytes, data);
-    var newJpeg = new Buffer(newData, "binary");
-    fs.writeFileSync(imgPath, newJpeg);
-
     console.log("Saved file with location succesfully.");
+  }
+  else {
+    console.warn("Err trying to save file in POST:/images");
+    res.send("Err trying to save file in POST:/images. Try again");
   }
   res.send('Response from server');
 });
