@@ -97,12 +97,12 @@ app.get('/images/all/location', (req, res) => {
       }
     }
   };
-  Image.find(query, { path: 1, _id: 0 }).exec((err, imgs) => {
+  Image.find(query, {  }).exec((err, imgs) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
       var imageWithReplies = imgs.map(img => {
-        img.map(reply => reply.path);
-        return img;
+        img.replies.map(reply => reply.path);
+        return { "_id": img._id, "path": img.path, "replies": img.replies };
       });
       res.json(imageWithReplies);
     }
