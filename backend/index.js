@@ -142,14 +142,33 @@ app.post('/images', upload.single('image'), (req, res) => {
     exifObj["GPS"][piexif.GPSIFD.GPSLatitude] = ConvertDMSToFormat(latitude); //todo need to find way to store more precise conversion values
     exifObj["GPS"][piexif.GPSIFD.GPSLongitudeRef] = long < 0 ? 'W' : 'E';
     exifObj["GPS"][piexif.GPSIFD.GPSLongitude] = ConvertDMSToFormat(longitude);
-
+    
     var exifbytes = piexif.dump(exifObj);
     var newData = piexif.insert(exifbytes, data);
     var newJpeg = new Buffer(newData, "binary");
     fs.writeFileSync(imgPath, newJpeg);
+
     console.log("Saved file with location succesfully.");
   }
   res.send('Response from server');
+});
+
+app.post('/images/new', upload.single('image'), (req, res) => {
+  //take image
+
+  if (req.file) {
+    //adding metadata to image
+    var imgName = req.file.filename;
+    var imgPath = path.join(imagesDirPath, imgName);
+    var lat = JSON.parse(req.body.metadata).lat;
+    var long = JSON.parse(req.body.metadata).long;
+
+    //insert
+  }
+  else {
+    console.warn("Err trying to save file in POST:/images");
+    res.send("Err trying to save file in POST:/images. Try again");
+  }
 });
 
 function ConvertDDToDMS(lat, long) {
