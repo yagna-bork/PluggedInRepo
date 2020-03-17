@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const ImageReplySchema = new Schema({
+  path: 'string',
+});
+
 const ImageSchema = new Schema({
   path: 'string',
   location: {
@@ -12,8 +16,9 @@ const ImageSchema = new Schema({
     coordinates: {
       type: [Number],
       required: true
-    }
-  }
+    },
+  },
+  replies: [ImageReplySchema]
 }, { collection: 'Image' });
 ImageSchema.index({ location: "2dsphere" });
 
