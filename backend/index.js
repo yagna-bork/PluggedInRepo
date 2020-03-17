@@ -108,12 +108,6 @@ app.get('/images/all/location', (req, res) => {
       res.status(500).send(err);
     }
   });
-//   [
-//     '8d9eb4f243818462486c4b4a335800d41583915034688.jpg',
-//      '64c49688d7ee67639cea0ce8a16add6c1583915140584.jpg',
-//      '7c25aa15c7e3758339233ab94e03da1b1581685833120.jpg',
-//      'ad163391aa21b0edbebeefd361d27f0b1581685809274.jpg'
-//  ]
 });
 
 //new image posted
