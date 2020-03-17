@@ -97,6 +97,23 @@ app.get('/images/all/location', (req, res) => {
       }
     }
   };
+  Image.find(query, { path: 1 }).exec((err, imgs) => {
+    if (!err) {
+      console.log("Retrieving items from db:", imgs);
+      res.json(imgs);
+    }
+    else {
+      console.warn("err trying to get images in /images/all/location.", err);
+      res.status(500).send(err);
+    }
+  });
+});
+
+//get replies to a given image
+app.get('/images/all/location', (req, res) => {
+  console.log("Call to /images/all/location (GET).");
+
+  //query database for paths
   Image.find(query).exec((err, imgs) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
