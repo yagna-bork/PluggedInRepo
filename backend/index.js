@@ -14,8 +14,8 @@ const mongoose = require('mongoose');
 // const userLatitude = 52.292016;
 // const userLongitude = -1.532429;
 
-const userLatitude = 37.31682222222223;
-const userLongitude = -122.01681111111111;
+const userLatitude = 37.33233141;
+const userLongitude = -122.0312186;
 
 const radius = 10000; //meters
 const imagesDirPath = path.join(__dirname, 'images');
@@ -93,8 +93,7 @@ app.get('/images/all/location', (req, res) => {
     {
       $near:
       {
-        $geometry: { type: "Point", coordinates: [userLongitude, userLatitude] },
-        $maxDistance: 20
+        $geometry: { type: "Point", coordinates: [userLongitude, userLatitude] }
       }
     }
   };
