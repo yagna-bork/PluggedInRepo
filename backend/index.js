@@ -87,6 +87,28 @@ app.get('/images/all', (req, res) => {
 app.get('/images/all/location', (req, res) => {
   console.log("Call to /images/all/location (GET).");
 
+  //query database for paths
+  const query = {
+    location:
+    {
+      $near:
+      {
+        $geometry: { type: "Point", coordinates: [userLongitude, userLatitude] },
+        $minDistance: 0,
+        $maxDistance: 20
+      }
+    }
+  };
+  Image.find(query).exec((err, imgs) => {
+    if (!err) {
+      console.log("Retrieving items from db:", imgs);
+      res.send(imgs);
+    }
+    else {
+      console.warn("err trying to get images in /images/all/location.");
+      res.status(500).send(err);
+    }
+  });
 //   [
 //     '8d9eb4f243818462486c4b4a335800d41583915034688.jpg',
 //      '64c49688d7ee67639cea0ce8a16add6c1583915140584.jpg',
