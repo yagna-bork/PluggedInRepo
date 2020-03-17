@@ -125,7 +125,7 @@ app.post('/images', upload.single('image'), (req, res) => {
 
     //insert image in to db
     const location = { type: 'Point', coordinates: [long, lat] }
-    Image.create({ path: imgName, location: location }, (err, doc) => {
+    Image.create({ path: imgName, location: location, replies: [] }, (err, doc) => {
       if (!err) {
         console.log("added following doc to Image collection: ", doc);
         res.send({ 'created': doc });
