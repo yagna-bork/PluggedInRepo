@@ -94,7 +94,6 @@ app.get('/images/all/location', (req, res) => {
       $near:
       {
         $geometry: { type: "Point", coordinates: [userLongitude, userLatitude] },
-        $minDistance: 0,
         $maxDistance: 20
       }
     }
@@ -105,7 +104,7 @@ app.get('/images/all/location', (req, res) => {
       res.send(imgs);
     }
     else {
-      console.warn("err trying to get images in /images/all/location.");
+      console.warn("err trying to get images in /images/all/location.", err);
       res.status(500).send(err);
     }
   });

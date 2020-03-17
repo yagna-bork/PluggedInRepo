@@ -15,5 +15,6 @@ const ImageSchema = new Schema({
     }
   }
 }, { collection: 'Image' });
+ImageSchema.index({ location: "2dsphere" });
 
 module.exports = Image = mongoose.model('Image', ImageSchema);
