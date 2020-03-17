@@ -151,7 +151,6 @@ app.post('/images', upload.single('image'), (req, res) => {
     console.warn("Err trying to save file in POST:/images");
     res.send("Err trying to save file in POST:/images. Try again");
   }
-  res.send('Response from server');
 });
 
 app.post('/images/new', (req, res) => {
