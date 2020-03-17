@@ -34,6 +34,7 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const Test = require('./models/Test');
+const Image = require('./models/Image');
 mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true
 }).then(() => console.log("MongoDB connected"))
@@ -153,22 +154,51 @@ app.post('/images', upload.single('image'), (req, res) => {
   res.send('Response from server');
 });
 
-app.post('/images/new', upload.single('image'), (req, res) => {
+app.post('/images/new', (req, res) => {
   //take image
+  console.log(req);
+  var imgName = req.body.filename;
+  var imgPath = path.join(imagesDirPath, imgName);
+  var lat = JSON.parse(req.body.metadata).lat;
+  var long = JSON.parse(req.body.metadata).long;
 
-  if (req.file) {
-    //adding metadata to image
-    var imgName = req.file.filename;
-    var imgPath = path.join(imagesDirPath, imgName);
-    var lat = JSON.parse(req.body.metadata).lat;
-    var long = JSON.parse(req.body.metadata).long;
+  //insert image in to db
+  const location = { type: 'Point', coordinates: [long, lat] }
+  Image.create({ path: imgPath, location: location }, (err, doc) => {
+    if (!err) {
+      console.log("added following doc to Image collection: ", doc);
+      res.send({ 'created': doc });
+    }
+    else {
+      console.warn("err trying to create doc in /images/new.");
+      res.status(500).send(err);
+    }
+  });
 
-    //insert
-  }
-  else {
-    console.warn("Err trying to save file in POST:/images");
-    res.send("Err trying to save file in POST:/images. Try again");
-  }
+  // if (req.file) {
+  //   //adding metadata to image
+  //   var imgName = req.file.filename;
+  //   var imgPath = path.join(imagesDirPath, imgName);
+  //   var lat = JSON.parse(req.body.metadata).lat;
+  //   var long = JSON.parse(req.body.metadata).long;
+
+  //   //insert image in to db
+  //   const location = { type: 'Point', coordinates: [long, lat] }
+  //   Image.create({ path: imgPath, location: location }, (err, doc) => {
+  //     if (!err) {
+  //       console.log("added following doc to Image collection: ", doc);
+  //       res.send({ 'created': doc });
+  //     }
+  //     else {
+  //       console.warn("err trying to create doc in /images/new.");
+  //       res.status(500).send(err);
+  //     }
+  //   });
+  // }
+  // else {
+  //   console.warn("Err trying to save file in POST:/images");
+  //   res.send("Err trying to save file in POST:/images. Try again");
+  // }
 });
 
 function ConvertDDToDMS(lat, long) {

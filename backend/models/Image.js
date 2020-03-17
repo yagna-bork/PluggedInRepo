@@ -1,8 +1,19 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const TestSchema = new Schema({
-  name: 'string'
-}, { collection: 'test' });
+const ImageSchema = new Schema({
+  path: 'string',
+  location: {
+    type: {
+      type: String, // Don't do `{ location: { type: String } }`
+      enum: ['Point'], // 'location.type' must be 'Point'
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  }
+}, { collection: 'Image' });
 
-module.exports = Test = mongoose.model('test', TestSchema);
+module.exports = Image = mongoose.model('Image', ImageSchema);
