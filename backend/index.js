@@ -101,8 +101,9 @@ app.get('/images/all/location', (req, res) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
       var imageWithReplies = imgs.map(img => {
-        img.replies.map(reply => reply.path);
-        return { "_id": img._id, "path": img.path, "replies": img.replies };
+        var repliesPathOnly = img.replies.map(reply => reply.path);
+        console.log(img.replies)
+        return { "_id": img._id, "path": img.path, "replies": repliesPathOnly };
       });
       res.json(imageWithReplies);
     }
