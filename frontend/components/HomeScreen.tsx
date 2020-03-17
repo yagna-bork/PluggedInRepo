@@ -26,7 +26,7 @@ var apiRootUrl = 'http://localhost:9000/'; //IOS
 
 interface Props {}
 interface State {
-  imageUrls: string[]
+  images: any[]
 }
 
 class HomeScreen extends Component<Props, State> {
@@ -34,7 +34,7 @@ class HomeScreen extends Component<Props, State> {
     super(props);
 
     this.state = {
-      imageUrls: []
+      images: []
     }
   }
 
@@ -60,17 +60,27 @@ class HomeScreen extends Component<Props, State> {
   fetchImages() {
     return new Promise((resolve, reject) => {
       fetch(apiRootUrl + 'images/all/location').then(res => {
-        res.json().then(imageNames => {
-          var imageUrls: string[] = [];
+        res.json().then(data => {
+          // var imageUrls: string[] = [];
+          // var imageUrlRoot = apiRootUrl + 'images/';
+
+          // imageNames.forEach(imageName => {
+          //   imageUrls.push(imageUrlRoot + imageName);
+          // });
+
+          // this.setState({
+          //   imageUrls: imageUrls
+          // });
+          console.log("data inside fetchImages: ", data);
+          
           var imageUrlRoot = apiRootUrl + 'images/';
-
-          imageNames.forEach(imageName => {
-            imageUrls.push(imageUrlRoot + imageName);
+          var images = [];
+          
+          data.forEach(img => {
+            images.push({ _id: img.id, url: imageUrlRoot + img.path});
           });
 
-          this.setState({
-            imageUrls: imageUrls
-          });
+          this.setState({images: images});
           resolve();
         });
       }).catch((err) => {
@@ -115,7 +125,7 @@ class HomeScreen extends Component<Props, State> {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         /> */}
-        <VerticalScrollView imageUrls={this.state.imageUrls}/>
+        <VerticalScrollView images={this.state.images}/>
       </View>
     );
   }
