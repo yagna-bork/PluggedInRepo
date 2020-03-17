@@ -167,11 +167,11 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
       }
     });
     
-    console.log("Saved file with location succesfully.");
+    console.log("Saved reply succesfully.");
   }
   else {
-    console.warn("Err trying to save file in POST:/images");
-    res.send("Err trying to save file in POST:/images. Try again");
+    console.warn("Err trying to save file in POST:/images/replies");
+    res.send("Err trying to save file in POST:/images/replies. Try again");
   }
 });
 
