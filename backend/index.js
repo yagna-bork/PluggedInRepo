@@ -100,7 +100,7 @@ app.get('/images/all/location', (req, res) => {
   Image.find(query).exec((err, imgs) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
-      res.send(imgs);
+      res.json(imgs);
     }
     else {
       console.warn("err trying to get images in /images/all/location.", err);
