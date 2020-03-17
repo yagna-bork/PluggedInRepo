@@ -127,7 +127,7 @@ class UploadScreen extends Component<Props, State> {
     this.getCurrentLocation().then(() => {
       console.log("Trying to upload image to server. Current state is: ");
       console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images/replies', { //Replies CHANGED
+      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
         Authorization: "Bearer access-token",
         otherHeader: "foo",
         'Content-Type': 'multipart/form-data',
@@ -137,7 +137,33 @@ class UploadScreen extends Component<Props, State> {
           name: 'metadata', data: JSON.stringify({
             lat: this.state.location.lat,
             long: this.state.location.long,
-            parentId: "5e7119201b53d905b43b255c",//Replies CHANGED
+          })
+        }
+      ]).then((resp) => {
+        console.log('Response from server after uploading image: ');
+        console.log(resp);
+      }).catch((err) => {
+        console.log('Err trying to upload iamge to server: ');
+        console.log(err);
+      });
+    });
+  }
+
+  uploadReply(parentId) {
+    this.getCurrentLocation().then(() => {
+      console.log("Trying to upload image to server. Current state is: ");
+      console.log(this.state);
+      RNFetchBlob.fetch('POST', apiRootUrl + 'images/replies', {
+        Authorization: "Bearer access-token",
+        otherHeader: "foo",
+        'Content-Type': 'multipart/form-data',
+      }, [
+        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
+        {
+          name: 'metadata', data: JSON.stringify({
+            lat: this.state.location.lat,
+            long: this.state.location.long,
+            parentId: parentId,
           })
         }
       ]).then((resp) => {

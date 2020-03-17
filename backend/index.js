@@ -97,7 +97,7 @@ app.get('/images/all/location', (req, res) => {
       }
     }
   };
-  Image.find(query, {  }).exec((err, imgs) => {
+  Image.find(query).exec((err, imgs) => {
     if (!err) {
       console.log("Retrieving items from db:", imgs);
       var imageWithReplies = imgs.map(img => {
