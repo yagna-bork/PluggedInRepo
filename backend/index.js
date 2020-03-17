@@ -117,7 +117,7 @@ app.get('/images/all/location', (req, res) => {
 app.get('/images/reply', (req, res) => {
   console.log("Call to /images/reply (GET).");
 
-  var parentId = req.body.parentId;
+  var parentId = req.query.parentId;
   console.log("parentId inside images/reply: ", parentId);
 
   //query database for paths
