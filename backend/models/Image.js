@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ImageReplySchema = new Schema({
   path: 'string',
-  posted: 'Date'
+  posted: { type: Date, default: Date.now }
 });
 
 const ImageSchema = new Schema({

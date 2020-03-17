@@ -117,7 +117,7 @@ app.post('/images', upload.single('image'), (req, res) => {
     console.log("Uploaded file is valid: ");
     console.log(req.file);
 
-    //adding metadata to image
+    //getting metadata for image
     var imgName = req.file.filename;
     var imgPath = path.join(imagesDirPath, imgName);
     var lat = JSON.parse(req.body.metadata).lat;
@@ -129,6 +129,37 @@ app.post('/images', upload.single('image'), (req, res) => {
       if (!err) {
         console.log("added following doc to Image collection: ", doc);
         res.send({ 'created': doc });
+      }
+      else {
+        console.warn("err trying to create doc in /images/new.");
+        res.status(500).send(err);
+      }
+    });
+    
+    console.log("Saved file with location succesfully.");
+  }
+  else {
+    console.warn("Err trying to save file in POST:/images");
+    res.send("Err trying to save file in POST:/images. Try again");
+  }
+});
+
+//new reply to an image
+app.post('/images/replies', upload.single('image'), (req, res) => {
+  console.log("Call to /images/replies (POST).");
+  if (req.file) {
+    console.log("Uploaded file is valid: ");
+    console.log(req.file);
+
+    //only need name for replies, no location
+    var imgName = req.file.filename;
+    var parentId = req.body.parentId;
+    
+    //insert reply in to db
+    Image.update({_id: parentId}, { $push: { 'replies': { path: imgName }}}).exec((err, reply) => {
+      if (!err) {
+        console.log('Succesfully added reply: ', reply);
+        res.json(reply);
       }
       else {
         console.warn("err trying to create doc in /images/new.");
