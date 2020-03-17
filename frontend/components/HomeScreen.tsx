@@ -69,7 +69,7 @@ class HomeScreen extends Component<Props, State> {
           var images = [];
           
           data.forEach(img => {
-            images.push({ _id: img.id, url: imageUrlRoot + img.path});
+            images.push({ _id: img._id, url: imageUrlRoot + img.path});
           });
 
           this.setState({images: images});
