@@ -110,6 +110,9 @@ app.get('/images/all/location', (req, res) => {
       console.warn("err trying to get images in /images/all/location.", err);
       res.status(500).send(err);
     }
+  }).catch(err => {
+    console.log("Err trying to connect to db in /images/all/location: ", err);
+    res.status(500).send("Err. Try again.", err);
   });
 });
 
