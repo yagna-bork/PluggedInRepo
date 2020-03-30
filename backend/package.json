@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --inspect=0.0.0.0 index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug"
   },
   "keywords": [],
   "author": "",

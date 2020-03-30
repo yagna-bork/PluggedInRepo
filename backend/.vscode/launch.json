@@ -16,41 +16,8 @@
       "address": "localhost",
       "localRoot": "${workspaceFolder}",
       "protocol": "inspector",
-      "restart": true
-    },
-
-    {
-      "name": "Launch Node.js in Docker (Broken)",
-      "type": "docker",
-      "request": "launch",
-      "preLaunchTask": "Run Docker Container",
-      "platform": "node"
-    },
-
-    {
-      "name": "Launch Node.js in Docker",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
-      // "runtimeExecutable": "npm",
-      // "runtimeArgs": [
-      //   "run-script",
-      //   "debug"
-      // ],
-      "address": "localhost",
-      "port": 9229,
-      "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/usr/src/app"
-    },
-    
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "program": "${workspaceFolder}/index.js"
+      "restart": true,
+      "preLaunchTask": "start_node_compose"
     }
   ]
 }
