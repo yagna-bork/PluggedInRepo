@@ -1,75 +1,75 @@
-import React from 'react'
-import { Component } from 'react';
+import React, {Component} from 'react';
 import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
-  Image,
-  TouchableOpacity
+  TouchableOpacity,
+  PermissionsAndroid,
+  Platform,
 } from 'react-native';
-import { PermissionsAndroid, Platform } from 'react-native';
-import { withNavigationFocus } from 'react-navigation'
 
 import ImagePicker from 'react-native-image-picker';
 import RNFetchBlob from 'react-native-fetch-blob';
 import Geolocation from '@react-native-community/geolocation';
-import { RNCamera } from 'react-native-camera';
+import {RNCamera} from 'react-native-camera';
 
-var apiRootUrl = Platform.OS === 'ios' ? 'http://localhost:9000/' : 'http://10.0.2.2:9000/';
-// var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
+var apiRootUrl =
+  Platform.OS === 'ios' ? 'http://localhost:9000/' : 'http://10.0.2.2:9000/';
 
-interface Props {}
+interface Props {
+  navigation: any;
+}
 interface State {
-  uploadImage: { uri: string, data: string },
-  location: { ready: boolean, lat: number, long: number }
+  uploadImage: {uri: string; data: string};
+  location: {lat: number; long: number};
 }
 
-var emptyAvatarSource = { uri: "", data: "", location: { ready: false, lat: null, long: null } };
-var defaultLocation = { ready: false, lat: -100000, long: -100000 };
+var emptyAvatarSource = {
+  uri: '',
+  data: '',
+  location: {ready: false, lat: null, long: null},
+};
+var defaultLocation = {ready: false, lat: -100000, long: -100000};
 
 class UploadScreen extends Component<Props, State> {
+  camera: any;
   constructor(props: Props) {
     super(props);
 
     this.state = {
       uploadImage: emptyAvatarSource,
-      location: defaultLocation
-    }
+      location: defaultLocation,
+    };
   }
-  
+
   componentDidMount() {
-    if(Platform.OS === 'ios') {
-      this.getCurrentLocation().then(() => {
-        console.log("State after getting location of phone: ");
-        console.log(this.state);
-      }).catch(err => {
-        console.log("Err trying to get location from phone: ");
-        console.log(err);
-      });
-    }
-    else {
+    if (Platform.OS === 'ios') {
+      this.getCurrentLocation()
+        .then(() => {
+          console.log('State after getting location of phone: ');
+          console.log(this.state);
+        })
+        .catch(err => {
+          console.log('Err trying to get location from phone: ');
+          console.log(err);
+        });
+    } else {
       //ANDROID permissions
-      this.requestLocationPermission().then(() => {
-        this.getCurrentLocation();
-      }).then(() => {
-        this.requestCameraPermission();
-      }).then(() => {
-        console.log("State after getting location of phone: ");
-        console.log(this.state);
-      }).catch(err => {
-        console.log("Err trying to get location from phone: ");
-        console.log(err);
-      });
+      this.requestLocationPermission()
+        .then(() => {
+          this.getCurrentLocation();
+        })
+        .then(() => {
+          this.requestCameraPermission();
+        })
+        .then(() => {
+          console.log('State after getting location of phone: ');
+          console.log(this.state);
+        })
+        .catch(err => {
+          console.log('Err trying to get location from phone: ');
+          console.log(err);
+        });
     }
   }
 
@@ -78,48 +78,59 @@ class UploadScreen extends Component<Props, State> {
       let geoOptions = {
         enableHighAccuracy: true,
         timeOut: 20000,
-        maximumAge: 60 * 60 * 24 //info valid for one day?
-      }
+        maximumAge: 60 * 60 * 24, //info valid for one day?
+      };
 
-      Geolocation.getCurrentPosition(position => {
-        this.setState({
-          uploadImage: this.state.uploadImage,
-          location: { ready: true, lat: position.coords.latitude, long: position.coords.longitude }
-        });
-        resolve();
-      }, err => {
-        reject(err);
-      }, geoOptions);
+      Geolocation.getCurrentPosition(
+        position => {
+          this.setState(prevState => {
+            return {
+              uploadImage: prevState.uploadImage,
+              location: {
+                lat: position.coords.latitude,
+                long: position.coords.longitude,
+              },
+            };
+          });
+          resolve();
+        },
+        err => {
+          reject(err);
+        },
+        geoOptions,
+      );
     });
   }
 
   selectImage() {
     const options = {
       title: 'Select Avatar',
-      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      customButtons: [{name: 'fb', title: 'Choose Photo from Facebook'}],
       storageOptions: {
         skipBackup: true,
         path: 'images',
       },
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, response => {
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        const source = { uri: response.uri, data: response.data };
+        const source = {uri: response.uri, data: response.data};
 
-        this.setState({
-          uploadImage: source,
-          location: this.state.location
+        this.setState(prevState => {
+          return {
+            uploadImage: source,
+            location: prevState.location,
+          };
         });
 
-        console.log("State after getting image from gallery: ");
+        console.log('State after getting image from gallery: ');
         console.log(this.state);
 
-        console.log("About to upload image selected from gallery.");
+        console.log('About to upload image selected from gallery.');
         this.uploadImage();
       }
     });
@@ -127,60 +138,86 @@ class UploadScreen extends Component<Props, State> {
 
   uploadImage() {
     this.getCurrentLocation().then(() => {
-      console.log("Trying to upload image to server. Current state is: ");
+      console.log('Trying to upload image to server. Current state is: ');
       console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images', {
-        Authorization: "Bearer access-token",
-        otherHeader: "foo",
-        'Content-Type': 'multipart/form-data',
-      }, [
-        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
+      RNFetchBlob.fetch(
+        'POST',
+        apiRootUrl + 'images',
         {
-          name: 'metadata', data: JSON.stringify({
-            lat: this.state.location.lat,
-            long: this.state.location.long,
-          })
-        }
-      ]).then((resp) => {
-        console.log('Response from server after uploading image: ');
-        console.log(resp);
-      }).catch((err) => {
-        console.log('Err trying to upload iamge to server: ');
-        console.log(err);
-      });
+          Authorization: 'Bearer access-token',
+          otherHeader: 'foo',
+          'Content-Type': 'multipart/form-data',
+        },
+        [
+          {
+            name: 'image',
+            filename: 'image.png',
+            type: 'image/png',
+            data: this.state.uploadImage.data,
+          },
+          {
+            name: 'metadata',
+            data: JSON.stringify({
+              lat: this.state.location.lat,
+              long: this.state.location.long,
+            }),
+          },
+        ],
+      )
+        .then(resp => {
+          console.log('Response from server after uploading image: ');
+          console.log(resp);
+        })
+        .catch(err => {
+          console.log('Err trying to upload iamge to server: ');
+          console.log(err);
+        });
     });
   }
 
-  uploadReply(parentId) {
+  uploadReply(parentId: any) {
     this.getCurrentLocation().then(() => {
-      console.log("Trying to upload image to server. Current state is: ");
+      console.log('Trying to upload image to server. Current state is: ');
       console.log(this.state);
-      RNFetchBlob.fetch('POST', apiRootUrl + 'images/replies', {
-        Authorization: "Bearer access-token",
-        otherHeader: "foo",
-        'Content-Type': 'multipart/form-data',
-      }, [
-        { name: 'image', filename: 'image.png', type: 'image/png', data: this.state.uploadImage.data },
+      RNFetchBlob.fetch(
+        'POST',
+        apiRootUrl + 'images/replies',
         {
-          name: 'metadata', data: JSON.stringify({
-            lat: this.state.location.lat,
-            long: this.state.location.long,
-            parentId: parentId,
-          })
-        }
-      ]).then((resp) => {
-        console.log('Response from server after uploading image: ');
-        console.log(resp);
-      }).catch((err) => {
-        console.log('Err trying to upload iamge to server: ');
-        console.log(err);
-      });
+          Authorization: 'Bearer access-token',
+          otherHeader: 'foo',
+          'Content-Type': 'multipart/form-data',
+        },
+        [
+          {
+            name: 'image',
+            filename: 'image.png',
+            type: 'image/png',
+            data: this.state.uploadImage.data,
+          },
+          {
+            name: 'metadata',
+            data: JSON.stringify({
+              lat: this.state.location.lat,
+              long: this.state.location.long,
+              parentId,
+            }),
+          },
+        ],
+      )
+        .then(resp => {
+          console.log('Response from server after uploading image: ');
+          console.log(resp);
+        })
+        .catch(err => {
+          console.log('Err trying to upload iamge to server: ');
+          console.log(err);
+        });
     });
   }
 
   //android permissions
   async requestLocationPermission() {
-    console.log("Trying to get location permissions.");
+    console.log('Trying to get location permissions.');
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -200,7 +237,7 @@ class UploadScreen extends Component<Props, State> {
         console.log('Location permission denied');
       }
     } catch (err) {
-      console.log("Err while trying to get location permission: ");
+      console.log('Err while trying to get location permission: ');
       console.log(err);
     }
   }
@@ -231,61 +268,64 @@ class UploadScreen extends Component<Props, State> {
 
   async takePicture() {
     if (this.camera) {
-      const options = { quality: 0.5, base64: true };
-      const data = this.camera.takePictureAsync(options).then(img => {
-        const source = { uri: img.uri, data: img.base64 };
+      const options = {quality: 0.5, base64: true};
+      this.camera
+        .takePictureAsync(options)
+        .then((img: {uri: any; base64: any}) => {
+          const source = {uri: img.uri, data: img.base64};
 
-        this.setState({
-          uploadImage: source,
-          location: this.state.location
+          this.setState(prevState => {
+            return {
+              uploadImage: source,
+              location: prevState.location,
+            };
+          });
+
+          console.log(
+            'Picture taken successfully. State after taking picture: ',
+          );
+          console.log(this.state);
+        })
+        .then(() => {
+          this.uploadImage();
+        })
+        .catch((err: any) => {
+          console.warn('Err trying to take picture. Camera handler exists.');
+          console.warn(err);
         });
-
-        console.log("Picture taken successfully. State after taking picture: ");
-        console.log(this.state);
-
-
-      }).then(() => {
-        this.uploadImage();
-      })
-      .catch(err => {
-        console.warn("Err trying to take picture. Camera handler exists.");
-        console.warn(err);
-      });
-    }
-    else {
-      console.warn("Err trying to take picture.");
+    } else {
+      console.warn('Err trying to take picture.');
     }
   }
- 
+
   renderCamera = () => {
-    console.log("Rendering camera");
-    const isActive = this.props.navigation.isFocused()
-    if (isActive == true) {
+    console.log('Rendering camera');
+    const isActive = this.props.navigation.isFocused();
+    if (isActive) {
       return (
-        <RNCamera 
-          ref={ref => { this.camera = ref }}
+        <RNCamera
+          ref={(ref: any) => {
+            this.camera = ref;
+          }}
           style={styles.preview}>
-          <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'center' }}>
-            <TouchableOpacity style={styles.capture} onPress={this.selectImage.bind(this)}>
+          <View style={styles.view}>
+            <TouchableOpacity style={styles.capture} onPress={this.selectImage}>
               <Text>Gallery</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.takePicture.bind(this)} style={styles.capture}>
-              <Text style={{ fontSize: 14 }}> SNAP </Text>
+            <TouchableOpacity onPress={this.takePicture} style={styles.capture}>
+              // eslint-disable-next-line react-native/no-inline-styles
+              <Text style={styles.text}> SNAP </Text>
             </TouchableOpacity>
           </View>
-      </RNCamera>
-      )
+        </RNCamera>
+      );
     } else {
-      return null
+      return null;
     }
-  }
+  };
 
   render() {
-    return (
-      <View style={styles.container}>
-        { this.renderCamera() }
-      </View>
-    );
+    return <View style={styles.container}>{this.renderCamera()}</View>;
   }
 }
 
@@ -302,41 +342,13 @@ class UploadScreen extends Component<Props, State> {
 //         </TouchableOpacity> */}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  text: {
+    fontSize: 14,
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+  view: {
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   container: {
     flex: 1,
@@ -355,15 +367,6 @@ const styles = StyleSheet.create({
     padding: 15,
     paddingHorizontal: 20,
     alignSelf: 'center',
-    margin: 20,
-  },
-  galleryBtn: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: "flex-start",
     margin: 20,
   },
 });
