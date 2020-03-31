@@ -3,14 +3,17 @@ import {
   AppRegistry,
   ScrollView,
   Image, Text, View, TextInput,
-  Dimensions, 
-  TouchableOpacity} from 'react-native';
-
+  Dimensions,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
 
 interface Props {
   images: any[],
   apiRootUrl: string
 }
+
+import { Image as LazyImage } from 'react-native-elements';
 
 interface State {
 
@@ -19,54 +22,59 @@ interface State {
 class VerticalScrollView extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    
-    this.fetchReplies = this.fetchReplies.bind(this);
-  }
-
-  fetchReplies(parentId: string) {
-    return new Promise((resolve, reject) => {
-      fetch(this.props.apiRootUrl + `images/reply?parentId=${encodeURIComponent(parentId)}`).then(res => {
-        res.json().then(replyNames => {
-          var replyUrls: string[] = [];
-          var imageUrlRoot = this.props.apiRootUrl + 'images/';
-
-          replyNames.forEach(replyName => {
-            replyUrls.push(imageUrlRoot + replyName);
-          });
-
-          //do something with them
-          console.log("fetchReplies: ", replyUrls);
-          resolve();
-        }).catch(err => {
-          reject(err);
-        });
-      }).catch((err) => {
-        reject(err);
-      });
-    });
   }
 
   render() {
     var screenHeight = Dimensions.get('window').height;
+    var screenWidth = Dimensions.get('window').width;
+
+    //test if lazy loading working TODO: add time delay server end
+    var repeatedReply = [];
+    for (var i = 0; i < 25; i++) {
+      repeatedReply.push(this.props.images[0].replies[0]);
+    }
 
     return (
       <ScrollView decelerationRate={0} snapToInterval={screenHeight} snapToAlignment={"center"} showsVerticalScrollIndicator={false}>
-        {this.props.images.map(img => {
-          console.log(img);
-          return (<TouchableOpacity onPress={() => this.fetchReplies(img._id)}>
-            <Image
-              style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
-              source={{ uri: img.url }}
-            />
-          </TouchableOpacity>);
-        })}
-
-        {/* {this.props.imageUrls.map(url => {
-          return <Image
-            style={{ width: screenHeight * (1920 / 1080), height: screenHeight }}
-            source={{ uri: url }}
+        {/* 50 replies test horizontal scroll */}
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          <Image
+            style={{ width: screenWidth, height: screenHeight }}
+            source={{ uri: this.props.images[0].url }}
           />
-        })} */}
+          {repeatedReply.map(reply => {
+            return (<LazyImage
+              style={{ width: screenWidth, height: screenHeight }}
+              source={{ uri: reply.url }}
+              PlaceholderContent={<ActivityIndicator />}
+            />);
+          })}
+        </ScrollView>
+        {/* TODO: only load when in view port (or near?) */}
+        {/* Dynamically generated parent Images and replies */}
+        {
+          this.props.images.map(img => {
+            return (
+              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+                {
+                  <Image
+                    style={{ width: screenWidth, height: screenHeight }}
+                    source={{ uri: img.url }}
+                  />
+                }
+                {
+                  img.replies.map(reply => {
+                    return (<LazyImage
+                      style={{ width: screenWidth, height: screenHeight }}
+                      source={{ uri: reply.url }}
+                      PlaceholderContent={<ActivityIndicator />}
+                    />);
+                  })
+                }
+              </ScrollView>
+            );
+          })
+        }
       </ScrollView>
     );
   }
