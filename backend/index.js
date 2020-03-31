@@ -40,7 +40,7 @@ const Image = require('./models/Image');
 mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true
 }).then(() => console.log("MongoDB connected"))
-.catch(err => console.warn("Err trying to connection to MongoDb. \n", err));
+  .catch(err => console.warn("Err trying to connection to MongoDb. \n", err));
 
 app.use(bodyParser.json())
 
@@ -63,7 +63,7 @@ app.get('/db/create', (req, res) => {
   Test.create({ name: "test1" }, (err, doc) => {
     if (!err) {
       console.log("added following doc to db: ", doc);
-      res.send({'created': doc});
+      res.send({ 'created': doc });
     }
     else {
       console.warn("err trying to create doc in /.");
@@ -75,7 +75,7 @@ app.get('/db/create', (req, res) => {
 app.get('/images/all', (req, res) => {
   console.log("Call to /images/all (GET).");
   fs.readdir(imagesDirPath, (err, files) => {
-    if(!err) {
+    if (!err) {
       console.log("Sending: ");
       console.log(files);
       res.send(files);
@@ -88,7 +88,48 @@ app.get('/images/all', (req, res) => {
   });
 });
 
+//parent images and their replies
+//[{_id, path, replies: {posted, path}}]
 app.get('/images/all/location', (req, res) => {
+  console.log("Call to /images/all/location (GET).");
+
+  //query database for paths
+  const query = {
+    location:
+    {
+      $near:
+      {
+        $geometry: { type: "Point", coordinates: [userLongitude, userLatitude] }
+      }
+    }
+  };
+  Image.find(query, { path: 1, replies: 1 }).exec((err, imgs) => {
+    if (!err) {
+      console.log("Retrieving items from db:", imgs);
+
+      //[{_id, path, replies: {posted, path}}]
+      var formattedImgs = imgs.map(parentImg => {
+        var formattedReplies = parentImg.replies.map(reply => {
+          return {
+            posted: reply.posted,
+            path: reply.path
+          }
+        });
+
+        parentImg.replies = formattedReplies;
+        return parentImg;
+      });
+      res.json(formattedImgs);
+    }
+    else {
+      console.warn("err trying to get images in /images/all/location.", err);
+      res.status(500).send(err);
+    }
+  });
+});
+
+//only get parent images without their replies
+app.get('/images/all/location/only', (req, res) => {
   console.log("Call to /images/all/location (GET).");
 
   //query database for paths
@@ -121,7 +162,7 @@ app.get('/images/reply', (req, res) => {
   console.log("parentId inside images/reply: ", parentId);
 
   //query database for paths
-  Image.findOne({ _id: parentId}, { replies: 1 }).exec((err, img) => {
+  Image.findOne({ _id: parentId }, { replies: 1 }).exec((err, img) => {
     if (!err) {
       console.log("Retrieving items from db:", img);
       var repliesPathOnly = img.replies.map(reply => reply.path);
@@ -138,7 +179,7 @@ app.get('/images/reply', (req, res) => {
 //new image posted
 app.post('/images', upload.single('image'), (req, res) => {
   console.log("Call to /images (POST).");
-  if(req.file) {
+  if (req.file) {
     console.log("Uploaded file is valid: ");
     console.log(req.file);
 
@@ -160,7 +201,7 @@ app.post('/images', upload.single('image'), (req, res) => {
         res.status(500).send(err);
       }
     });
-    
+
     console.log("Saved file with location succesfully.");
   }
   else {
@@ -179,9 +220,9 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
     //only need name for replies, no location
     var imgName = req.file.filename;
     var parentId = JSON.parse(req.body.metadata).parentId;
-    
+
     //insert reply in to db
-    Image.updateOne({_id: parentId}, { $push: { 'replies': { path: imgName }}}).exec((err, reply) => {
+    Image.updateOne({ _id: parentId }, { $push: { 'replies': { path: imgName } } }).exec((err, reply) => {
       if (!err) {
         console.log('Succesfully added reply: ', reply);
         res.json(reply);
@@ -191,7 +232,7 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
         res.status(500).send(err);
       }
     });
-    
+
     console.log("Saved reply succesfully.");
   }
   else {
@@ -206,7 +247,7 @@ function ConvertDDToDMS(lat, long) {
 }
 
 function ConvertDMSToFormat(dms) {
-  return [[dms[0] ,1], [dms[1], 1], [dms[2], 100]];
+  return [[dms[0], 1], [dms[1], 1], [dms[2], 100]];
 }
 
 //taken from https://stackoverflow.com/questions/1140189/converting-latitude-and-longitude-to-decimal-values
@@ -219,7 +260,7 @@ function ConvertDMSToDD(degrees, minutes, seconds, direction) {
   return dd;
 }
 
-var readFileAndCheckDistancePromise = function(imgName, imgPath, validImageNames) {
+var readFileAndCheckDistancePromise = function (imgName, imgPath, validImageNames) {
   return fs.promises.readFile(imgPath).then(data => {
     var parser = exif.create(data);
     var imgExif = parser.parse();
@@ -255,7 +296,9 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180)
 }
 
-
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', (req, res, next) => {
+  console.log(`@${Date.now()}`, ": call for image");
+  next();
+}, express.static(path.join(__dirname, 'images')));
 
 app.listen(3000, () => console.log("Listening on port 3000..."));
