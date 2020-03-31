@@ -331,18 +331,6 @@ class UploadScreen extends Component<Props, State> {
   }
 }
 
-// {/* <Text>Upload One</Text>
-//         <Image
-//           style={{ width: 100, height: 100 }}
-//           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
-//         />
-//         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.selectImage.bind(this)}>
-//           <Text>Select</Text>
-//         </TouchableOpacity>
-//         <TouchableOpacity style={{ width: 200, height: 50 }} onPress={this.uploadImage.bind(this)}>
-//           <Text>Upload</Text>
-//         </TouchableOpacity> */}
-
 const styles = StyleSheet.create({
   text: {
     fontSize: 14,
