@@ -40,6 +40,9 @@ class UploadScreen extends Component<Props, State> {
       uploadImage: emptyAvatarSource,
       location: defaultLocation,
     };
+
+    this.selectImage = this.selectImage.bind(this);
+    this.takePicture = this.takePicture.bind(this);
   }
 
   componentDidMount() {
@@ -313,7 +316,6 @@ class UploadScreen extends Component<Props, State> {
               <Text>Gallery</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.takePicture} style={styles.capture}>
-              // eslint-disable-next-line react-native/no-inline-styles
               <Text style={styles.text}> SNAP </Text>
             </TouchableOpacity>
           </View>
