@@ -22,10 +22,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { useNavigation } from '@react-navigation/native';
 
-var apiRootUrl = Platform.OS === 'ios' ? 'http://localhost:9000/' : 'http://10.0.2.2:9000/';
+var apiRootUrl = Platform.OS === 'ios' ? 'http://localhost:9000' : 'http://10.0.2.2:9000';
 // var apiRootUrl = 'http://10.0.2.2:9000/'; //ANDROID
 
-interface Props {}
+interface Props { }
 interface State {
   images: any[]
 }
@@ -39,9 +39,9 @@ class HomeScreen extends Component<Props, State> {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     console.log("HomeScreen mounted.");
-    this.fetchImages().then(() => {
+    await this.fetchImages().then(() => {
       console.log("State after fetching images from server: ");
       console.log(this.state);
     }).catch(err => {
@@ -50,30 +50,33 @@ class HomeScreen extends Component<Props, State> {
     });
   }
 
+  appendRootUrl(subPath: string, resource: string) {
+    return apiRootUrl + "/" + subPath + (resource === '' ? "" : "/" + resource);
+  }
+
   fetchImages() {
     return new Promise((resolve, reject) => {
-      fetch(apiRootUrl + 'images/all/location').then(res => {
+
+      fetch(this.appendRootUrl('images/all/location', '')).then(res => {
         res.json().then(data => {
-          // var imageUrls: string[] = [];
-          // var imageUrlRoot = apiRootUrl + 'images/';
-
-          // imageNames.forEach(imageName => {
-          //   imageUrls.push(imageUrlRoot + imageName);
-          // });
-
-          // this.setState({
-          //   imageUrls: imageUrls
-          // });
-          console.log("data inside fetchImages: ", data);
-          
           var imageUrlRoot = apiRootUrl + 'images/';
-          var images = [];
-          
-          data.forEach(img => {
-            images.push({ _id: img._id, url: imageUrlRoot + img.path});
+          var formattedImages = [];
+
+          data.forEach(obj => {
+            var formattedReplies = obj.replies.map(reply => {
+              return {
+                url: this.appendRootUrl('images', reply.path)
+              }
+            });
+
+            var formattedObj = {
+              url: this.appendRootUrl('images', obj.path),
+              replies: formattedReplies
+            };
+            formattedImages.push(formattedObj);
           });
 
-          this.setState({images: images});
+          this.setState({ images: formattedImages });
           resolve();
         });
       }).catch((err) => {
@@ -94,7 +97,10 @@ class HomeScreen extends Component<Props, State> {
           style={{ width: 100, height: 100 }}
           source={{ uri: this.state.uploadImage.uri === "" ? 'https://upload.wikimedia.org/wikipedia/commons/6/64/Poster_not_available.jpg' : this.state.uploadImage.uri }}
         /> */}
-        <VerticalScrollView images={this.state.images} apiRootUrl={apiRootUrl}/>
+        {
+          this.state.images[0] &&
+          <VerticalScrollView images={this.state.images} apiRootUrl={apiRootUrl} />
+        }
       </View>
     );
   }
