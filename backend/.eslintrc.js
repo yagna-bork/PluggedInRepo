@@ -21,8 +21,5 @@ module.exports = {
     ],
     "@typescript-eslint/indent": [2, 2],
     "import/extensions": [1, "never"],
-    "interface-name-prefix": {
-      prefixWithI: "always"
-    }
   }
 };
