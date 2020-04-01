@@ -8,6 +8,20 @@ import bodyParser from 'body-parser';
 import Image, { IImage } from './models/Image';
 import ImageReply, { IImageReply } from './models/ImageReply';
 
+// TODO implement these
+interface RequestWithBody<T> extends Request {
+  body: T;
+}
+
+interface Location {
+  lat: number;
+  long: number;
+}
+
+interface Id {
+  id: string;
+}
+
 const userLatitude = 37.33233141;
 const userLongitude = -122.0312186;
 
@@ -135,6 +149,7 @@ app.get('/images/reply', (req: Request, res: Response): void => {
   console.log('parentId inside images/reply: ', parentId);
 
   // query database for paths
+  // TODO use as promise
   Image.findOne({ _id: parentId }, { replies: 1 }).exec((err, img) => {
     if (!err) {
       console.log('Retrieving items from db:', img);
@@ -150,15 +165,6 @@ app.get('/images/reply', (req: Request, res: Response): void => {
 
 // new image posted
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-// TODO implement this
-interface IImagesRequest extends Request {
-  body: {
-    metadata: {
-      lat: number;
-      long: number;
-    };
-  };
-}
 
 app.post(
   '/images',
@@ -174,7 +180,8 @@ app.post(
 
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
-      Image.create({ path: imgName, location, replies: [] }, (err, doc) => { // TODO convert to promise
+      // TODO use below to promise
+      Image.create({ path: imgName, location, replies: [] }, (err, doc) => {
         if (!err) {
           console.log('added following doc to Image collection: ', doc);
           res.send({ created: doc });
@@ -191,12 +198,6 @@ app.post(
     }
   },
 );
-
-interface IImagesRepliesRequest extends Request {
-  body: {
-    parentId: string;
-  };
-}
 
 // new reply to an image
 app.post('/images/replies', upload.single('image'), (req, res) => {
@@ -218,6 +219,7 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
         },
       },
     };
+    // TODO use as promise
     Image.updateOne(query, updateQuery).exec((err, reply) => {
       if (!err) {
         console.log('Succesfully added reply: ', reply);
