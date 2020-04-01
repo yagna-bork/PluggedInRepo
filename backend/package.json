@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon --inspect=0.0.0.0 index.ts",
+    "start": "nodemon --inspect -r ts-node/register index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -21,7 +21,8 @@
     "mongoose": "^5.9.2",
     "multer": "^1.4.2",
     "nodemon": "^2.0.2",
-    "piexifjs": "^1.0.4"
+    "piexifjs": "^1.0.4",
+    "ts-node": "^8.8.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.26.0",
