@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 
 const ImageReplySchema = new Schema({
   path: 'string',
-  posted: { type: Date, default: Date.now }
+  posted: { type: Date, default: Date.now },
 });
 
 const ImageSchema = new Schema({
@@ -12,15 +13,16 @@ const ImageSchema = new Schema({
     type: {
       type: String, // Don't do `{ location: { type: String } }`
       enum: ['Point'], // 'location.type' must be 'Point'
-      required: true
+      required: true,
     },
     coordinates: {
       type: [Number],
-      required: true
+      required: true,
     },
   },
-  replies: [ImageReplySchema]
+  replies: [ImageReplySchema],
 }, { collection: 'Image' });
-ImageSchema.index({ location: "2dsphere" });
+ImageSchema.index({ location: '2dsphere' });
 
-module.exports = Image = mongoose.model('Image', ImageSchema);
+const Image = mongoose.model('Image', ImageSchema);
+export default Image;

@@ -5,10 +5,12 @@ import multer from 'multer';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+// eslint-disable-next-line import/extensions
 import Test from './models/Test';
+// eslint-disable-next-line import/extensions
 import Image from './models/Image';
 
-interface Image {}
+// interface Image {}
 
 const userLatitude = 37.33233141;
 const userLongitude = -122.0312186;
@@ -177,9 +179,7 @@ app.post('/images', upload.single('image'), (req, res) => {
 
     // getting metadata for image
     const imgName = req.file.filename;
-    const imgPath = path.join(imagesDirPath, imgName);
-    const { lat } = JSON.parse(req.body.metadata);
-    const { long } = JSON.parse(req.body.metadata);
+    const { lat, long } = JSON.parse(req.body.metadata);
 
     // insert image in to db
     const location = { type: 'Point', coordinates: [long, lat] };
