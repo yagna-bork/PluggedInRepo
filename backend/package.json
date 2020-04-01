@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon --inspect=0.0.0.0 index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug"
+    "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +22,19 @@
     "multer": "^1.4.2",
     "nodemon": "^2.0.2",
     "piexifjs": "^1.0.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-json": "^2.1.1",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "prettier": "^2.0.2"
   }
 }
