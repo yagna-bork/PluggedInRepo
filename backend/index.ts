@@ -1,13 +1,11 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const exif = require('exif-parser');
-const multer = require('multer');
-const piexif = require("piexifjs");
-const dmsConversion = require('dms-conversion');
-const crypto = require('crypto');
-const mongoose = require('mongoose');
-var bodyParser = require('body-parser');
+import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import multer from 'multer';
+import dmsConversion from 'dms-conversion';
+import crypto from 'crypto';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
 // const parseDms = dmsConversion.parseDms;
 
@@ -261,42 +259,6 @@ function ConvertDMSToDD(degrees, minutes, seconds, direction) {
     dd = dd * -1;
   } // Don't do anything for N or E
   return dd;
-}
-
-var readFileAndCheckDistancePromise = function (imgName, imgPath, validImageNames) {
-  return fs.promises.readFile(imgPath).then(data => {
-    var parser = exif.create(data);
-    var imgExif = parser.parse();
-    var imgLat = imgExif.tags.GPSLatitude;
-    var imgLong = imgExif.tags.GPSLongitude;
-
-    if (getDistanceFromLatLonInMeters(userLatitude, userLongitude, imgLat, imgLong) < radius) {
-      console.log(imgName + " is nearby to user.");
-      validImageNames.push(imgName);
-    }
-  }).catch(err => {
-    console.log("Err checking filtering " + imgName + " by location: ");
-    console.log(err);
-    console.log("Ignored error.");
-  });
-}
-
-function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
-  var R = 6371; // Radius of the earth in km
-  var dLat = deg2rad(lat2 - lat1);  // deg2rad below
-  var dLon = deg2rad(lon2 - lon1);
-  var a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2)
-    ;
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  var d = R * c; // Distance in km
-  return d * 1000; //distance in m
-}
-
-function deg2rad(deg) {
-  return deg * (Math.PI / 180)
 }
 
 app.use('/images', (req, res, next) => {
