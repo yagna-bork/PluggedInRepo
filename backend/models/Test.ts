@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const TestSchema = new Schema({
-  name: 'string',
+  name: { type: String },
 }, { collection: 'test' });
 
 const Test = mongoose.model('test', TestSchema);
