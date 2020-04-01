@@ -2,9 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "nodemon --inspect=0.0.0.0 index.js",
+    "start": "nodemon --inspect=0.0.0.0 index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
