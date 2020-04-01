@@ -8,8 +8,6 @@ import bodyParser from 'body-parser';
 import Image, { IImage } from './models/Image';
 import ImageReply, { IImageReply } from './models/ImageReply';
 
-// interface Image {}
-
 const userLatitude = 37.33233141;
 const userLongitude = -122.0312186;
 
@@ -32,7 +30,6 @@ const upload = multer({ storage });
 
 mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   useNewUrlParser: true,
-// eslint-disable-next-line no-console
 })
   .then(() => console.log('MongoDB connected'))
   // eslint-disable-next-line no-console
@@ -40,7 +37,7 @@ mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
 
 app.use(bodyParser.json());
 
-app.get('/images/all', (req, res) => {
+app.get('/images/all', (req: Request, res: Response) => {
   console.log('Call to /images/all (GET).');
   fs.readdir(imagesDirPath, (err, files) => {
     if (!err) {
@@ -58,7 +55,7 @@ app.get('/images/all', (req, res) => {
 // parent images and their replies
 // [{_id, path, replies: {posted, path}}]
 // todo: distance?
-app.get('/images/all/location', (req, res) => {
+app.get('/images/all/location', (req: Request, res: Response) => {
   console.log('Call to /images/all/location (GET).');
 
   // query database for paths
@@ -71,7 +68,7 @@ app.get('/images/all/location', (req, res) => {
       },
     },
   };
-  Image.find(query, { path: 1, replies: 1 }).exec((err, imgs: [IImage]) => {
+  Image.find(query, { path: 1, replies: 1 }).exec((err: unknown, imgs: [IImage]): void => {
     if (!err) {
       console.log('Retrieving items from db:', imgs);
 
@@ -111,7 +108,7 @@ app.get('/images/all/location/only', (req: Request, res: Response) => {
       },
     },
   };
-  Image.find(query, { path: 1 }).exec((err, imgs) => {
+  Image.find(query, { path: 1 }).exec((err: unknown, imgs: string[]): void => {
     if (!err) {
       console.log('Retrieving items from db:', imgs);
       res.json(imgs);
@@ -126,7 +123,12 @@ app.get('/images/all/location/only', (req: Request, res: Response) => {
 });
 
 // get replies to a given image
-app.get('/images/reply', (req, res) => {
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+interface IReplyRequest extends Request {
+  query: string;
+}
+
+app.get('/images/reply', (req: Request, res: Response): void => {
   console.log('Call to /images/reply (GET).');
 
   const { parentId } = req.query;
@@ -147,34 +149,54 @@ app.get('/images/reply', (req, res) => {
 });
 
 // new image posted
-app.post('/images', upload.single('image'), (req, res) => {
-  console.log('Call to /images (POST).');
-  if (req.file) {
-    console.log('Uploaded file is valid: ');
-    console.log(req.file);
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+// TODO implement this
+interface IImagesRequest extends Request {
+  body: {
+    metadata: {
+      lat: number;
+      long: number;
+    };
+  };
+}
 
-    // getting metadata for image
-    const imgName = req.file.filename;
-    const { lat, long } = JSON.parse(req.body.metadata);
+app.post(
+  '/images',
+  upload.single('image'), (req, res) => {
+    console.log('Call to /images (POST).');
+    if (req.file) {
+      console.log('Uploaded file is valid: ');
+      console.log(req.file);
 
-    // insert image in to db
-    const location = { type: 'Point', coordinates: [long, lat] };
-    Image.create({ path: imgName, location, replies: [] }, (err, doc) => {
-      if (!err) {
-        console.log('added following doc to Image collection: ', doc);
-        res.send({ created: doc });
-      } else {
-        console.warn('err trying to create doc in /images/new.');
-        res.status(500).send(err);
-      }
-    });
+      // getting metadata for image
+      const imgName = req.file.filename;
+      const { lat, long } = JSON.parse(req.body.metadata);
 
-    console.log('Saved file with location succesfully.');
-  } else {
-    console.warn('Err trying to save file in POST:/images');
-    res.send('Err trying to save file in POST:/images. Try again');
-  }
-});
+      // insert image in to db
+      const location = { type: 'Point', coordinates: [long, lat] };
+      Image.create({ path: imgName, location, replies: [] }, (err, doc) => { // TODO convert to promise
+        if (!err) {
+          console.log('added following doc to Image collection: ', doc);
+          res.send({ created: doc });
+        } else {
+          console.warn('err trying to create doc in /images/new.');
+          res.status(500).send(err);
+        }
+      });
+
+      console.log('Saved file with location succesfully.');
+    } else {
+      console.warn('Err trying to save file in POST:/images');
+      res.send('Err trying to save file in POST:/images. Try again');
+    }
+  },
+);
+
+interface IImagesRepliesRequest extends Request {
+  body: {
+    parentId: string;
+  };
+}
 
 // new reply to an image
 app.post('/images/replies', upload.single('image'), (req, res) => {
