@@ -3,12 +3,12 @@ import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import crypto from 'crypto';
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import bodyParser from 'body-parser';
 // eslint-disable-next-line import/extensions
 import Test from './models/Test';
 // eslint-disable-next-line import/extensions
-import Image from './models/Image';
+import Image, { IImage, IImageReply, ImageReplySchema } from './models/Image';
 
 // interface Image {}
 
@@ -85,6 +85,7 @@ app.get('/images/all', (req, res) => {
 
 // parent images and their replies
 // [{_id, path, replies: {posted, path}}]
+// todo: distance?
 app.get('/images/all/location', (req, res) => {
   console.log('Call to /images/all/location (GET).');
 
@@ -98,14 +99,14 @@ app.get('/images/all/location', (req, res) => {
       },
     },
   };
-  Image.find(query, { path: 1, replies: 1 }).exec((err, imgs) => {
+  Image.find(query, { path: 1, replies: 1 }).exec((err, imgs: [IImage]) => {
     if (!err) {
       console.log('Retrieving items from db:', imgs);
 
       // [{_id, path, replies: {posted, path}}]
       const formattedImgs = imgs.map((parentImg) => {
         const formattedReplies = parentImg.replies
-          .map((reply: { posted: string; path: string }) => ({
+          .map((reply: IImageReply): IImageReply => new ImageReplySchema({
             posted: reply.posted,
             path: reply.path,
           }));

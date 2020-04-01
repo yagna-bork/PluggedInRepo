@@ -1,8 +1,22 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const { Schema } = mongoose;
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+export interface IImageReply extends Document {
+  path: string;
+  posted: Date;
+}
 
-const ImageReplySchema = new Schema({
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
+export interface IImage extends Document {
+  path: string;
+  location: {
+    type: string;
+    coordinates: [number];
+  };
+  replies: [IImageReply];
+}
+
+export const ImageReplySchema = new Schema({
   path: { type: String, required: true, unique: true },
   posted: { type: Date, default: Date.now },
 });
@@ -27,5 +41,4 @@ const ImageSchema = new Schema(
 );
 ImageSchema.index({ location: '2dsphere' });
 
-const Image = mongoose.model('Image', ImageSchema);
-export default Image;
+export default mongoose.model<IImage>('Image', ImageSchema);
