@@ -5,7 +5,6 @@ import multer from 'multer';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-import Test from './models/Test';
 import Image, { IImage } from './models/Image';
 import ImageReply, { IImageReply } from './models/ImageReply';
 
@@ -40,32 +39,6 @@ mongoose.connect('mongodb://mongo:27017/pluggedInDb', {
   .catch((err) => console.warn('Err trying to connection to MongoDb. \n', err));
 
 app.use(bodyParser.json());
-
-app.get('/db', (req, res) => {
-  console.log('Call to GET:/db');
-  Test.find({}).exec((err, docs) => {
-    if (!err) {
-      console.log('Retrieving items from db:', docs);
-      res.send(docs);
-    } else {
-      console.warn('err trying to get collection in /db.');
-      res.status(500).send(err);
-    }
-  });
-});
-
-// todo: make this a post
-app.get('/db/create', (req, res) => {
-  Test.create({ name: 'test1' }, (err, doc) => {
-    if (!err) {
-      console.log('added following doc to db: ', doc);
-      res.send({ created: doc });
-    } else {
-      console.warn('err trying to create doc in /.');
-      res.status(500).send(err);
-    }
-  });
-});
 
 app.get('/images/all', (req, res) => {
   console.log('Call to /images/all (GET).');
