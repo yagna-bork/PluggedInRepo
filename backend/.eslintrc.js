@@ -19,6 +19,7 @@ module.exports = {
       2,
       { devDependencies: ["**/test.tsx", "**/test.ts"] }
     ],
-    "@typescript-eslint/indent": [2, 2]
+    "@typescript-eslint/indent": [2, 2],
+    "import/extensions": [1, "never"]
   }
 };

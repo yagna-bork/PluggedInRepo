@@ -5,9 +5,7 @@ import multer from 'multer';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
-// eslint-disable-next-line import/extensions
 import Test from './models/Test';
-// eslint-disable-next-line import/extensions
 import Image, { IImage } from './models/Image';
 import ImageReply, { IImageReply } from './models/ImageReply';
 
