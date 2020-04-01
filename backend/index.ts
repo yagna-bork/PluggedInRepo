@@ -2,7 +2,6 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
-import dmsConversion from 'dms-conversion';
 import crypto from 'crypto';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
