@@ -1,14 +1,15 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
 import multer from 'multer';
 import crypto from 'crypto';
-import mongoose, { Document } from 'mongoose';
+import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 // eslint-disable-next-line import/extensions
 import Test from './models/Test';
 // eslint-disable-next-line import/extensions
-import Image, { IImage, IImageReply, ImageReplySchema } from './models/Image';
+import Image, { IImage } from './models/Image';
+import ImageReply, { IImageReply } from './models/ImageReply';
 
 // interface Image {}
 
@@ -106,13 +107,16 @@ app.get('/images/all/location', (req, res) => {
       // [{_id, path, replies: {posted, path}}]
       const formattedImgs = imgs.map((parentImg) => {
         const formattedReplies = parentImg.replies
-          .map((reply: IImageReply): IImageReply => new ImageReplySchema({
+          .map((reply: IImageReply): IImageReply => new ImageReply({
             posted: reply.posted,
             path: reply.path,
           }));
 
-        parentImg.replies = formattedReplies;
-        return parentImg;
+        return new Image({
+          path: parentImg.path,
+          location: parentImg.location,
+          replies: formattedReplies,
+        });
       });
       res.json(formattedImgs);
     } else {
@@ -123,7 +127,7 @@ app.get('/images/all/location', (req, res) => {
 });
 
 // only get parent images without their replies
-app.get('/images/all/location/only', (req, res) => {
+app.get('/images/all/location/only', (req: Request, res: Response) => {
   console.log('Call to /images/all/location (GET).');
 
   // query database for paths
@@ -144,9 +148,9 @@ app.get('/images/all/location/only', (req, res) => {
       console.warn('err trying to get images in /images/all/location.', err);
       res.status(500).send(err);
     }
-  }).catch((err) => {
+  }).catch((err: unknown) => {
     console.log('Err trying to connect to db in /images/all/location: ', err);
-    res.status(500).send('Err. Try again.', err);
+    res.status(500).send(`Err. Try again. ${err}`);
   });
 });
 
@@ -213,7 +217,15 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
     const { parentId } = JSON.parse(req.body.metadata);
 
     // insert reply in to db
-    Image.updateOne({ _id: parentId }, { $push: { replies: { path: imgName } } }).exec((err, reply) => {
+    const query = { _id: parentId };
+    const updateQuery = {
+      $push: {
+        replies: {
+          path: imgName,
+        },
+      },
+    };
+    Image.updateOne(query, updateQuery).exec((err, reply) => {
       if (!err) {
         console.log('Succesfully added reply: ', reply);
         res.json(reply);
