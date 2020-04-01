@@ -1,10 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface IImageReply extends Document {
-  path: string;
-  posted: Date;
-}
+import ImageReply, { IImageReply } from './ImageReply';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export interface IImage extends Document {
@@ -13,13 +8,8 @@ export interface IImage extends Document {
     type: string;
     coordinates: [number];
   };
-  replies: [IImageReply];
+  replies: IImageReply[];
 }
-
-export const ImageReplySchema = new Schema({
-  path: { type: String, required: true, unique: true },
-  posted: { type: Date, default: Date.now },
-});
 
 const ImageSchema = new Schema(
   {
@@ -35,7 +25,7 @@ const ImageSchema = new Schema(
         required: true,
       },
     },
-    replies: [ImageReplySchema],
+    replies: [ImageReply.schema],
   },
   { collection: 'Image' },
 );
