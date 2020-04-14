@@ -149,20 +149,7 @@ app.post(
 
       // getting metadata for image
       const imgName = req.file.filename;
-
-      // console.log('req.body.metadata: ', req.body.metadata);
-
-      // if (typeof req.body.metadata === 'string') {
-      //   console.log('req.body.metadata is a string');
-      // }
-
-      // const location = (req.body as Location);
-
-      // console.log('body: ', body);
-
       const { lat, long } = req.body as Location;
-
-      console.log(`lat: ${lat}, long: ${long}`);
 
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
