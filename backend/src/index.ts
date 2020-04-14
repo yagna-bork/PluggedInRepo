@@ -8,15 +8,6 @@ import bodyParser from 'body-parser';
 import Image, { IImage } from './models/Image';
 import ImageReply, { IImageReply } from './models/ImageReply';
 
-// TODO implement these
-interface RequestWithBody<T> extends Request {
-  body: T;
-}
-
-interface MetadataWithLocation {
-  metadata: Location;
-}
-
 interface Location {
   lat: number;
   long: number;
