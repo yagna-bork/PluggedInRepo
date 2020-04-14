@@ -13,6 +13,10 @@ interface RequestWithBody<T> extends Request {
   body: T;
 }
 
+interface MetadataWithLocation {
+  metadata: Location;
+}
+
 interface Location {
   lat: number;
   long: number;
@@ -137,7 +141,7 @@ app.get('/images/reply', (req: Request, res: Response): void => {
 // new image posted
 app.post(
   '/images',
-  upload.single('image'), (req, res) => {
+  upload.single('image'), (req: Request, res) => {
     console.log('Call to /images (POST).');
     if (req.file) {
       console.log('Uploaded file is valid: ');
@@ -145,20 +149,33 @@ app.post(
 
       // getting metadata for image
       const imgName = req.file.filename;
-      const { lat, long } = JSON.parse(req.body.metadata);
+
+      // console.log('req.body.metadata: ', req.body.metadata);
+
+      // if (typeof req.body.metadata === 'string') {
+      //   console.log('req.body.metadata is a string');
+      // }
+
+      // const location = (req.body as Location);
+
+      // console.log('body: ', body);
+
+      const { lat, long } = req.body as Location;
+
+      console.log(`lat: ${lat}, long: ${long}`);
 
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
 
-      Image.create({ path: imgName, location, replies: [] })
-        .then((doc) => {
-          console.log('added following doc to Image collection: ', doc);
-          res.send({ created: doc });
-        })
-        .catch((err) => {
-          console.warn('err trying to create doc in /images/new.');
-          res.status(500).send(err);
-        });
+      // Image.create({ path: imgName, location, replies: [] })
+      //   .then((doc) => {
+      //     console.log('added following doc to Image collection: ', doc);
+      //     res.send({ created: doc });
+      //   })
+      //   .catch((err) => {
+      //     console.warn('err trying to create doc in /images/new.');
+      //     res.status(500).send(err);
+      //   });
     }
   },
 );
