@@ -121,23 +121,20 @@ app.get('/images/reply', (req: Request, res: Response): void => {
   console.log('parentId inside images/reply: ', parentId);
 
   // query database for paths
-  // TODO use as promise
-  Image.findOne({ _id: parentId }, { replies: 1 }).exec((err, img) => {
-    if (!err) {
+  Image.findOne({ _id: parentId }, { replies: 1 })
+    .then((img) => {
       console.log('Retrieving items from db:', img);
       const repliesPathOnly = img.replies.map((reply) => reply.path);
       console.log('About to send in /images/reply', repliesPathOnly);
       res.json(repliesPathOnly);
-    } else {
+    })
+    .catch((err) => {
       console.warn('err trying to get images in /images/reply.', err);
       res.status(500).send(err);
-    }
-  });
+    });
 });
 
 // new image posted
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-
 app.post(
   '/images',
   upload.single('image'), (req, res) => {
@@ -153,20 +150,15 @@ app.post(
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
       // TODO use below to promise
-      Image.create({ path: imgName, location, replies: [] }, (err, doc) => {
-        if (!err) {
+      Image.create({ path: imgName, location, replies: [] })
+        .then((doc) => {
           console.log('added following doc to Image collection: ', doc);
           res.send({ created: doc });
-        } else {
+        })
+        .catch((err) => {
           console.warn('err trying to create doc in /images/new.');
           res.status(500).send(err);
-        }
-      });
-
-      console.log('Saved file with location succesfully.');
-    } else {
-      console.warn('Err trying to save file in POST:/images');
-      res.send('Err trying to save file in POST:/images. Try again');
+        });
     }
   },
 );
