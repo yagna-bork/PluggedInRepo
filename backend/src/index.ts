@@ -167,15 +167,15 @@ app.post(
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
 
-      // Image.create({ path: imgName, location, replies: [] })
-      //   .then((doc) => {
-      //     console.log('added following doc to Image collection: ', doc);
-      //     res.send({ created: doc });
-      //   })
-      //   .catch((err) => {
-      //     console.warn('err trying to create doc in /images/new.');
-      //     res.status(500).send(err);
-      //   });
+      Image.create({ path: imgName, location, replies: [] })
+        .then((doc) => {
+          console.log('added following doc to Image collection: ', doc);
+          res.send({ created: doc });
+        })
+        .catch((err) => {
+          console.warn('err trying to create doc in /images/new.');
+          res.status(500).send(err);
+        });
     }
   },
 );
