@@ -23,6 +23,20 @@ function HomeScreenTab() {
   return <HomeScreen />;
 }
 
+//store sharing state between children components
+class Store {
+  state: {};
+  constructor() {
+    this.state = {};
+  }
+
+  mergeState(partialState: any) {
+    Object.assign(this.state, partialState);
+  }
+}
+
+const myStore = new Store();
+
 class App extends Component<Props, State> {
   render() {
     return (
