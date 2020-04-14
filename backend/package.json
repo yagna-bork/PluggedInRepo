@@ -6,7 +6,6 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "docker-compose -p dev -f docker-compose-dev.yml up jestdebug",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "keywords": [],
