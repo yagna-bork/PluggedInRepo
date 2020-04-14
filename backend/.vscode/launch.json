@@ -9,9 +9,9 @@
       "type": "node",
       "request": "attach",
       "name": "Docker: Attach to Node",
-      "remoteRoot": "/usr/src/app",
+      "remoteRoot": "/usr/src/app/src",
+      "localRoot": "${workspaceFolder}/src",
       "port": 9229,
-      "localRoot": "${workspaceFolder}",
       "protocol": "inspector",
       "restart": true,
       "preLaunchTask": "start_node_compose"
