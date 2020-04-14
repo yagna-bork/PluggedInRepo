@@ -149,7 +149,7 @@ app.post(
 
       // insert image in to db
       const location = { type: 'Point', coordinates: [long, lat] };
-      // TODO use below to promise
+
       Image.create({ path: imgName, location, replies: [] })
         .then((doc) => {
           console.log('added following doc to Image collection: ', doc);
@@ -183,7 +183,7 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
         },
       },
     };
-    // TODO use as promise
+
     Image.updateOne(query, updateQuery)
       .then((reply: IImageReply) => {
         console.log('Succesfully added reply: ', reply);
