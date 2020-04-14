@@ -184,17 +184,15 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
       },
     };
     // TODO use as promise
-    Image.updateOne(query, updateQuery).exec((err, reply) => {
-      if (!err) {
+    Image.updateOne(query, updateQuery)
+      .then((reply: IImageReply) => {
         console.log('Succesfully added reply: ', reply);
         res.json(reply);
-      } else {
+      })
+      .catch((err: unknown) => {
         console.warn('err trying to create doc in /images/new.');
         res.status(500).send(err);
-      }
-    });
-
-    console.log('Saved reply succesfully.');
+      });
   } else {
     console.warn('Err trying to save file in POST:/images/replies');
     res.send('Err trying to save file in POST:/images/replies. Try again');
