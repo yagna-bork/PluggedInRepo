@@ -159,11 +159,12 @@ class UploadScreen extends Component<Props, State> {
             data: this.state.uploadImage.data,
           },
           {
-            name: 'metadata',
-            data: JSON.stringify({
-              lat: this.state.location.lat,
-              long: this.state.location.long,
-            }),
+            name: 'lat',
+            data: this.state.location.lat,
+          },
+          {
+            name: 'long',
+            data: this.state.location.long,
           },
         ],
       )
