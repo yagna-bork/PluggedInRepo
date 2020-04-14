@@ -25,7 +25,7 @@ interface Id {
 const userLatitude = 37.33233141;
 const userLongitude = -122.0312186;
 
-const imagesDirPath = path.join(__dirname, 'images');
+const imagesDirPath = path.join(__dirname, '../images');
 const imgFileExt = 'jpg';
 
 const app = express();
@@ -105,34 +105,6 @@ app.get('/images/all/location', (req: Request, res: Response) => {
       console.warn('err trying to get images in /images/all/location.', err);
       res.status(500).send(err);
     }
-  });
-});
-
-// only get parent images without their replies
-app.get('/images/all/location/only', (req: Request, res: Response) => {
-  console.log('Call to /images/all/location (GET).');
-
-  // query database for paths
-  const query = {
-    location:
-    {
-      $near:
-      {
-        $geometry: { type: 'Point', coordinates: [userLongitude, userLatitude] },
-      },
-    },
-  };
-  Image.find(query, { path: 1 }).exec((err: unknown, imgs: string[]): void => {
-    if (!err) {
-      console.log('Retrieving items from db:', imgs);
-      res.json(imgs);
-    } else {
-      console.warn('err trying to get images in /images/all/location.', err);
-      res.status(500).send(err);
-    }
-  }).catch((err: unknown) => {
-    console.log('Err trying to connect to db in /images/all/location: ', err);
-    res.status(500).send(`Err. Try again. ${err}`);
   });
 });
 
