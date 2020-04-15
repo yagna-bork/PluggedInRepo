@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Platform} from 'react-native';
 
+import Geolocation from '@react-native-community/geolocation';
 import VerticalScrollView from './VerticalScrollView';
 
 var apiRootUrl =
@@ -9,6 +10,7 @@ var apiRootUrl =
 interface Props {}
 interface State {
   images: any[];
+  location: {lat?: number; long?: number};
 }
 
 class HomeScreen extends Component<Props, State> {
@@ -17,7 +19,37 @@ class HomeScreen extends Component<Props, State> {
 
     this.state = {
       images: [],
+      location: {},
     };
+  }
+
+  getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      let geoOptions = {
+        enableHighAccuracy: true,
+        timeOut: 20000,
+        maximumAge: 60 * 60 * 24, //info valid for one day?
+      };
+
+      Geolocation.getCurrentPosition(
+        position => {
+          this.setState(prevState => {
+            return {
+              images: prevState.images,
+              location: {
+                lat: position.coords.latitude,
+                long: position.coords.longitude,
+              },
+            };
+          });
+          resolve();
+        },
+        err => {
+          reject(err);
+        },
+        geoOptions,
+      );
+    });
   }
 
   async componentDidMount() {
@@ -37,34 +69,46 @@ class HomeScreen extends Component<Props, State> {
     return apiRootUrl + '/' + subPath + (resource === '' ? '' : '/' + resource);
   }
 
+  appendQueryParams(urlStr: string, params: any): string {
+    let url = new URL(urlStr);
+    Object.keys(params).forEach(key =>
+      url.searchParams.append(key, params[key]),
+    );
+    return url.toString();
+  }
+
   fetchImages() {
     return new Promise((resolve, reject) => {
-      fetch(this.appendRootUrl('images/all/location', ''))
-        .then(res => {
-          res.json().then(data => {
-            var formattedImages: {url: string; replies: any}[] = [];
+      this.getCurrentLocation().then(() => {
+        let url = this.appendRootUrl('images/all/location', '');
+        let params = this.state.location;
+        fetch(this.appendQueryParams(url, params))
+          .then(res => {
+            res.json().then(data => {
+              var formattedImages: {url: string; replies: any}[] = [];
 
-            data.forEach((obj: {replies: any[]; path: string}) => {
-              var formattedReplies = obj.replies.map(reply => {
-                return {
-                  url: this.appendRootUrl('images', reply.path),
+              data.forEach((obj: {replies: any[]; path: string}) => {
+                var formattedReplies = obj.replies.map(reply => {
+                  return {
+                    url: this.appendRootUrl('images', reply.path),
+                  };
+                });
+
+                var formattedObj = {
+                  url: this.appendRootUrl('images', obj.path),
+                  replies: formattedReplies,
                 };
+                formattedImages.push(formattedObj);
               });
 
-              var formattedObj = {
-                url: this.appendRootUrl('images', obj.path),
-                replies: formattedReplies,
-              };
-              formattedImages.push(formattedObj);
+              this.setState({images: formattedImages});
+              resolve();
             });
-
-            this.setState({images: formattedImages});
-            resolve();
+          })
+          .catch(err => {
+            reject(err);
           });
-        })
-        .catch(err => {
-          reject(err);
-        });
+      });
     });
   }
 

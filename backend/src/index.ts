@@ -17,8 +17,8 @@ interface Id {
   id: string;
 }
 
-const userLatitude = 37.33233141;
-const userLongitude = -122.0312186;
+// const userLatitude = 37.33233141;
+// const userLongitude = -122.0312186;
 
 const imagesDirPath = path.join(__dirname, '../images');
 const imgFileExt = 'jpg';
@@ -66,6 +66,10 @@ app.get('/images/all', (req: Request, res: Response) => {
 // todo: distance?
 app.get('/images/all/location', (req: Request, res: Response) => {
   console.log('Call to /images/all/location (GET).');
+
+  const { lat: userLatitude, long: userLongitude } = req.query as Location;
+
+  console.log(`userLatitude: ${userLatitude}, userLong: ${userLongitude}`);
 
   // query database for paths
   const query = {
