@@ -180,6 +180,7 @@ class UploadScreen extends Component<Props, State> {
   }
 
   uploadReply(parentId: any) {
+    //TODO removed use of location data for replies
     this.getCurrentLocation().then(() => {
       console.log('Trying to upload image to server. Current state is: ');
       console.log(this.state);
