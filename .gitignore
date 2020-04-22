@@ -1,6 +1,7 @@
 # Custom
 backend/images/*
 backend/data/*
+frontend/.vscode/.react/*
 
 # OSX
 #
