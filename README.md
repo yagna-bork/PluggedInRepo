@@ -10,6 +10,9 @@
 
 * CocoaPods could not find compatible versions for pod "React/Core": change to s.dependency 'React-Core' in react-native-fetch-blob.podspec
 
+# Tutorial
+https://www.microsoft.com/en-us/research/project/location-based-social-networks/
+
 # Workflow
 ## Branch workflow
 Commit frequent
