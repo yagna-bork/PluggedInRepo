@@ -12,6 +12,7 @@
 
 # Tutorial
 https://www.microsoft.com/en-us/research/project/location-based-social-networks/
+Fast-Image: https://github.com/DylanVann/react-native-fast-image
 
 # Workflow
 ## Branch workflow
