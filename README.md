@@ -10,6 +10,12 @@
 
 * CocoaPods could not find compatible versions for pod "React/Core": change to s.dependency 'React-Core' in react-native-fetch-blob.podspec
 
+# Tutorials
+* https://www.microsoft.com/en-us/research/project/location-based-social-networks/
+* Fast-Image: https://github.com/DylanVann/react-native-fast-image
+* Convert to Expo: https://stackoverflow.com/questions/44009586/converting-react-native-project-into-expo
+* Do iOS permission properly: https://medium.com/@rossbulat/react-native-managing-app-permissions-for-ios-4204e2286598
+
 # Workflow
 ## Branch workflow
 Commit frequent
