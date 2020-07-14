@@ -201,6 +201,6 @@ app.post('/images/replies', upload.single('image'), (req, res) => {
 app.use('/images', (req, res, next) => {
   console.log(`@${Date.now()}`, ': call for image');
   next();
-}, express.static(path.join(__dirname, 'images')));
+}, express.static(path.join(__dirname, '../images')));
 
 app.listen(3000, () => console.log('Listening on port 3000...'));
