@@ -27,22 +27,6 @@ class VerticalScrollView extends Component<Props, State> {
         snapToInterval={screenHeight}
         snapToAlignment="center"
         showsVerticalScrollIndicator={false}>
-        {/* 50 replies test horizontal scroll */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <Image
-            style={{width: screenWidth, height: screenHeight}}
-            source={{uri: this.props.images[0].url}}
-          />
-          {repeatedReply.map(reply => {
-            return (
-              <LazyImage
-                style={{width: screenWidth, height: screenHeight}}
-                source={{uri: reply.url}}
-                PlaceholderContent={<ActivityIndicator />}
-              />
-            );
-          })}
-        </ScrollView>
         {/* TODO: only load when in view port (or near?) */}
         {/* Dynamically generated parent Images and replies */}
         {this.props.images.map(img => {
