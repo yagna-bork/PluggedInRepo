@@ -15,12 +15,6 @@ class VerticalScrollView extends Component<Props, State> {
     var screenHeight = Dimensions.get('window').height;
     var screenWidth = Dimensions.get('window').width;
 
-    //test if lazy loading working TODO: add time delay server end
-    var repeatedReply = [];
-    for (var i = 0; i < 25; i++) {
-      repeatedReply.push(this.props.images[0].replies[0]);
-    }
-
     return (
       <ScrollView
         decelerationRate={0}
@@ -31,7 +25,12 @@ class VerticalScrollView extends Component<Props, State> {
         {/* Dynamically generated parent Images and replies */}
         {this.props.images.map(img => {
           return (
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              decelerationRate={0}
+              snapToInterval={screenWidth} //your element width
+              snapToAlignment="center">
               <Image
                 style={{width: screenWidth, height: screenHeight}}
                 source={{uri: img.url}}
