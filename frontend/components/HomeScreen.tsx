@@ -115,6 +115,7 @@ class HomeScreen extends Component<Props, State> {
   render() {
     return (
       <View style={styles.sectionContainer}>
+        {/** Wait to load images before rendering */}
         {this.state.images[0] && (
           <VerticalScrollView
             images={this.state.images}
